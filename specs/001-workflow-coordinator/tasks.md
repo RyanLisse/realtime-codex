@@ -42,12 +42,12 @@
 
 ### Implementation for User Story 1
 
-- [ ] T010 [P] [US1] Write sequential orchestration integration test in src/features/workflow/services/__tests__/workflowCoordinator.sequential.spec.ts
-- [ ] T011 [P] [US1] Implement FIFO task queue helper in src/features/workflow/services/taskQueue.ts
-- [ ] T012 [US1] Add sequential handoff logic to src/features/workflow/services/workflowCoordinator.ts (depends on T011)
-- [ ] T013 [US1] Wire sequential transitions in src/features/workflow/actions/workflow.actions.ts (depends on T012)
-- [ ] T014 [US1] Expose sequential state updates via src/features/workflow/hooks/useWorkflow.ts
-- [ ] T015 [US1] Document sequential flow in docs/WORKFLOW_STATE_MACHINE.md
+- [x] T010 [P] [US1] Write sequential orchestration integration test in src/features/workflow/services/__tests__/workflowCoordinator.sequential.spec.ts
+- [x] T011 [P] [US1] Implement FIFO task queue helper in src/features/workflow/services/taskQueue.ts
+- [x] T012 [US1] Add sequential handoff logic to src/features/workflow/services/workflowCoordinator.ts (depends on T011)
+- [x] T013 [US1] Wire sequential transitions in src/features/workflow/actions/workflow.actions.ts (depends on T012)
+- [x] T014 [US1] Expose sequential state updates via src/features/workflow/hooks/useWorkflow.ts
+- [x] T015 [US1] Document sequential flow in docs/WORKFLOW_STATE_MACHINE.md
 
 **Checkpoint**: User Story 1 fully functional and independently testable (MVP scope).
 
