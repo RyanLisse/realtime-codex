@@ -15,8 +15,7 @@ import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
 import { App } from "@/components/app";
 import { CameraCapture } from "@/components/camera-capture";
-import { handleRefundRequest } from "./server/backend-agent.action";
-import { getToken } from "./server/token.action";
+import { getToken } from "@/app/server/token.action";
 
 const refundBackchannel = tool({
   name: "Refund Expert",
