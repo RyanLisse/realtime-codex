@@ -1,5 +1,16 @@
 # Multi-Agent Workflow Orchestration System
 
+## Progress Snapshot (May 2024)
+
+- [x] Establish shared Codex MCP service with retry logic and unit coverage (`src/features/shared/services/codexMcp.service.ts`)
+- [x] Implement Project Manager workflow server actions with validation and artifact persistence (`src/features/project-manager/projectManager.action.tsx`)
+- [x] Create Project Manager status card component with comprehensive tests (`src/features/project-manager/components/ProjectManagerCard.tsx`)
+- [ ] Deliver remaining shared artifact management infrastructure
+- [ ] Complete Designer, Frontend Developer, Backend Developer, and Tester vertical slices
+- [ ] Build workflow orchestration coordinator and AI Elements visualization experience
+
+> **Note:** The sections below continue to outline the outstanding work required to finish the multi-agent orchestration system. Update this snapshot as additional milestones are delivered.
+
 ## Architecture Overview
 
 Build a multi-agent orchestration system using **Vertical Slice Architecture** with **Test-Driven Development (TDD)**. Each agent feature is a self-contained vertical slice with its own types, tests, business logic, server actions, and UI components. Integrate AI Elements for workflow visualization and comprehensive testing with Vitest (unit tests) and Playwright (E2E tests).

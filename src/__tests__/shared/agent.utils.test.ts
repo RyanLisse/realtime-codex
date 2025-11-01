@@ -1,7 +1,7 @@
 import { Agent, tool } from "@openai/agents";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import { createAgent } from "../shared/agent.utils";
+import { createAgent } from "@/shared/agent.utils";
 
 describe("createAgent", () => {
   it("should create an agent with correct properties", () => {
