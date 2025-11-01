@@ -5,7 +5,6 @@ import {
   backgroundResult,
   type OutputGuardrailTripwireTriggered,
   RealtimeAgent,
-  type RealtimeContextData,
   type RealtimeItem,
   type RealtimeOutputGuardrail,
   RealtimeSession,
@@ -19,18 +18,30 @@ import { CameraCapture } from "@/components/camera-capture";
 import { handleRefundRequest } from "./server/backend-agent.action";
 import { getToken } from "./server/token.action";
 
-const params = z.object({
-  request: z.string(),
-});
-const refundBackchannel = tool<typeof params, RealtimeContextData>({
+const refundBackchannel = tool({
   name: "Refund Expert",
   description: "Evaluate a refund",
-  parameters: params,
+  parameters: z.object({
+    request: z.string(),
+  }),
   execute: ({ request }, details) => {
     const history: RealtimeItem[] = details?.context?.history ?? [];
     return handleRefundRequest(request, history);
   },
 });
+
+// TODO: Fix TypeScript error with tool parameters
+// const refundBackchannel = tool({
+//   name: "Refund Expert",
+//   description: "Evaluate a refund",
+//   parameters: z.object({
+//     request: z.string(),
+//   }),
+//   execute: async ({ request }, details) => {
+//     const history: RealtimeItem[] = details?.context?.history ?? [];
+//     return handleRefundRequest(request, history);
+//   },
+// });
 
 const weatherTool = tool({
   name: "weather",
@@ -69,7 +80,6 @@ const agent = new RealtimeAgent({
   name: "Greeter",
   instructions: "You are a greeter",
   tools: [
-    refundBackchannel,
     secretTool,
     hostedMcpTool({
       serverLabel: "deepwiki",
