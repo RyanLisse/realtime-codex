@@ -259,14 +259,56 @@ workflow.status = "running";
     → state: completed, workflow.status: completed
 ```
 
-## Configuration
+## Sequential Agent Handoff Protocol
 
+### Implementation Details
+
+The workflow coordinator implements strict sequential handoffs where each agent must complete before the next begins. This ensures artifact continuity and prevents race conditions.
+
+#### Task Queue Management
+- **FIFO Processing**: Tasks processed in order with dependency resolution
+- **Dependency Checks**: Tasks only execute when all prerequisites are completed
+- **Priority System**: Higher priority tasks (lower numbers) processed first
+
+#### Handoff Records
+Each agent transition creates a detailed handoff record:
 ```typescript
-const MAX_WORKFLOWS = 100;        // Capacity limit
-const WORKFLOW_TTL_MS = 86400000; // 24 hours in ms
+interface HandoffRecord {
+  id: string;
+  workflowId: string;
+  fromAgent: AgentType;
+  toAgent: AgentType;
+  context: string;        // Transition explanation
+  artifacts: string[];    // Artifacts passed
+  timestamp: Date;
+  success: boolean;
+}
 ```
 
-**Tuning Guidelines**:
-- Increase `MAX_WORKFLOWS` if workflows complete slowly
-- Decrease `WORKFLOW_TTL_MS` for faster cleanup
-- Monitor memory usage and adjust accordingly
+#### State Transition Logic
+1. **Task Completion**: Agent reports completion with results
+2. **Queue Update**: Task moves from `taskQueue` to `completedTasks`
+3. **Dependency Check**: Next task dependencies verified
+4. **Agent Assignment**: `workflow.currentAgent` updated
+5. **Event Emission**: `AGENT_CHANGED` event triggers UI updates
+6. **Artifact Handoff**: Previous artifacts available to new agent
+
+### Sequential Execution Flow
+
+```
+ProjectManager → Designer → Frontend → Backend → Tester
+     ↓            ↓          ↓         ↓        ↓
+   Analyze     Design     Implement  Implement  Test
+ Requirements  Specs      Frontend   Backend   All
+```
+
+### Error Handling in Sequential Flow
+
+- **Agent Failure**: Blocks entire workflow, requires manual intervention
+- **Timeout**: Task marked failed, workflow transitions to FAILED state
+- **Recovery**: Manual retry or workflow cancellation options
+- **State Preservation**: Failed workflows maintain state for debugging
+
+### Parallel Execution Support
+
+While sequential is the default, the system supports parallel branches for independent tasks (e.g., Frontend + Backend working simultaneously before Tester convergence).
