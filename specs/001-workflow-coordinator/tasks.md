@@ -23,12 +23,12 @@
 
 **Purpose**: Core infrastructure required before story work can begin.
 
-- [ ] T004 Define Workflow, Task, Agent enums in src/features/workflow/types/workflow.types.ts
-- [ ] T005 [P] Author Zod validation schemas in src/features/workflow/types/workflow.schema.ts
-- [ ] T006 Implement persistence adapter skeleton in src/features/workflow/services/workflowPersistence.ts
-- [ ] T007 [P] Create event bus wrapper emitting workflow events in src/features/workflow/services/workflowEventBus.ts
-- [ ] T008 Scaffold coordinator class with dependency injection hooks in src/features/workflow/services/workflowCoordinator.ts
-- [ ] T009 Expose create/pause/resume server actions in src/features/workflow/actions/workflow.actions.ts
+- [x] T004 Define Workflow, Task, Agent enums in src/features/workflow/types/workflow.types.ts
+- [x] T005 [P] Author Zod validation schemas in src/features/workflow/types/workflow.schema.ts
+- [x] T006 Implement persistence adapter skeleton in src/features/workflow/services/workflowPersistence.ts
+- [x] T007 [P] Create event bus wrapper emitting workflow events in src/features/workflow/services/workflowEventBus.ts
+- [x] T008 Scaffold coordinator class with dependency injection hooks in src/features/workflow/services/workflowCoordinator.ts
+- [x] T009 Expose create/pause/resume server actions in src/features/workflow/actions/workflow.actions.ts
 
 **Checkpoint**: Foundational infrastructure complete. User stories may proceed.
 
