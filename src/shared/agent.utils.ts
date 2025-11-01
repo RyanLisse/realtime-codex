@@ -34,3 +34,22 @@ export function createToolWrapper<T, R = unknown>(
     },
   });
 }
+
+// Workflow feature entry points
+export type WorkflowServiceFactory = () => {
+  createWorkflow: (task: string) => Promise<string>;
+  getWorkflowStatus: (id: string) => Promise<unknown>;
+};
+
+export function createWorkflowServiceFactory(): WorkflowServiceFactory {
+  return {
+    createWorkflow: async (task: string) => {
+      // TODO: Implement workflow creation via WorkflowCoordinator
+      throw new Error("Workflow service not yet implemented");
+    },
+    getWorkflowStatus: async (_id: string) => {
+      // TODO: Implement workflow status retrieval
+      throw new Error("Workflow status retrieval not yet implemented");
+    },
+  };
+}
