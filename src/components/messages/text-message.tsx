@@ -6,7 +6,7 @@ type CustomLinkProps = {
   children?: React.ReactNode;
 };
 
-const CustomLink = ({ href, children, ...props }: CustomLinkProps) => (
+const _CustomLink = ({ href, children, ...props }: CustomLinkProps) => (
   <a
     href={href}
     {...props}

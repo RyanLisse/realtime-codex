@@ -13,8 +13,26 @@ export function useCamera() {
   const [isCapturing, setIsCapturing] = useState(false);
   const [lastPhoto, setLastPhoto] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const stop = useCallback(() => {
+    const stream = streamRef.current;
+    if (stream) {
+      for (const track of stream.getTracks()) {
+        track.stop();
+      }
+    }
+    streamRef.current = null;
+    const video = videoRef.current;
+    if (video) {
+      video.srcObject = null;
+    }
+    setIsActive(false);
+  }, []);
+
   const start = useCallback(async () => {
-    if (isActive) return;
+    if (isActive) {
+      return;
+    }
     setError(null);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -25,7 +43,7 @@ export function useCamera() {
       }
       video.srcObject = stream;
       // Ensure inline playback on iOS Safari
-      (video as any).playsInline = true;
+      (video as HTMLVideoElement & { playsInline: boolean }).playsInline = true;
       // Autoplay
       await video.play().catch(async () => {
         // Wait for metadata before play on some browsers
@@ -36,26 +54,18 @@ export function useCamera() {
       });
       setIsActive(true);
     } catch (e) {
-      console.error("Failed to start camera", e);
       setError(e instanceof Error ? e.message : "Failed to start camera");
       stop();
     }
-  }, [isActive]);
-  const stop = useCallback(() => {
-    const stream = streamRef.current;
-    if (stream) {
-      stream.getTracks().forEach((t) => t.stop());
+  }, [isActive, stop]);
+
+  const capture = useCallback(() => {
+    if (!videoRef.current) {
+      throw new Error("Video element not ready");
     }
-    streamRef.current = null;
-    const video = videoRef.current;
-    if (video) {
-      video.srcObject = null;
+    if (!isActive) {
+      throw new Error("Camera not active");
     }
-    setIsActive(false);
-  }, []);
-  const capture = useCallback(async () => {
-    if (!videoRef.current) throw new Error("Video element not ready");
-    if (!isActive) throw new Error("Camera not active");
     setIsCapturing(true);
     try {
       const video = videoRef.current;
@@ -69,21 +79,26 @@ export function useCamera() {
       canvas.width = width;
       canvas.height = height;
       const ctx = canvas.getContext("2d");
-      if (!ctx) throw new Error("Canvas 2D context not available");
+      if (!ctx) {
+        throw new Error("Canvas 2D context not available");
+      }
+      const JPEG_QUALITY = 0.92;
       ctx.drawImage(video, 0, 0, width, height);
-      const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
+      const dataUrl = canvas.toDataURL("image/jpeg", JPEG_QUALITY);
       setLastPhoto(dataUrl);
       return dataUrl;
     } finally {
       setIsCapturing(false);
     }
   }, [isActive]);
+
   useEffect(
     () => () => {
       stop();
     },
     [stop]
   );
+
   return {
     videoRef,
     isActive,

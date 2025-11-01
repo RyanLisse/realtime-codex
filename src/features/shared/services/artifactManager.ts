@@ -1,5 +1,5 @@
-import { promises as fs } from "fs";
-import { join } from "path";
+import { promises as fs } from "node:fs";
+import { join } from "node:path";
 import type { Artifact, ArtifactExportFormat } from "../types/artifact.types";
 import {
   AgentTaskSchema,
@@ -15,8 +15,8 @@ export type ArtifactListFilter = {
 };
 
 export class ArtifactManager {
-  private artifactsDir: string;
-  private artifactsCache: Map<string, Artifact>;
+  private readonly artifactsDir: string;
+  private readonly artifactsCache: Map<string, Artifact>;
 
   constructor(artifactsDir = "./artifacts") {
     this.artifactsDir = artifactsDir;

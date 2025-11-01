@@ -9,7 +9,7 @@ export async function componentGenerationTool(
   const stylesheets: FrontendArtifact["stylesheets"] = [];
 
   // Generate components from design spec
-  if (designSpec && designSpec.components) {
+  if (designSpec?.components) {
     for (const designComponent of designSpec.components) {
       const componentCode = generateReactComponent(designComponent, designSpec);
       components.push(componentCode);
@@ -124,13 +124,13 @@ function generatePropsParams(
 
 function generateComponentJSX(
   designComponent: DesignArtifact["components"][0],
-  designSpec: DesignArtifact
+  _designSpec: DesignArtifact
 ): string {
   const componentName = designComponent.componentName;
   let jsx = "";
 
   if (designComponent.category === "form") {
-    const props = designComponent.props
+    const _props = designComponent.props
       .map((p) => p.name)
       .filter((n) => n !== "label");
     jsx = `  return (
@@ -299,14 +299,24 @@ export default ${componentName};`,
 function extractComponentName(requirements: string): string {
   const lowerReq = requirements.toLowerCase();
 
-  if (lowerReq.includes("button")) return "Button";
-  if (lowerReq.includes("input") || lowerReq.includes("form field"))
+  if (lowerReq.includes("button")) {
+    return "Button";
+  }
+  if (lowerReq.includes("input") || lowerReq.includes("form field")) {
     return "Input";
-  if (lowerReq.includes("card")) return "Card";
-  if (lowerReq.includes("navigation") || lowerReq.includes("nav"))
+  }
+  if (lowerReq.includes("card")) {
+    return "Card";
+  }
+  if (lowerReq.includes("navigation") || lowerReq.includes("nav")) {
     return "Navigation";
-  if (lowerReq.includes("sidebar")) return "Sidebar";
-  if (lowerReq.includes("container")) return "Container";
+  }
+  if (lowerReq.includes("sidebar")) {
+    return "Sidebar";
+  }
+  if (lowerReq.includes("container")) {
+    return "Container";
+  }
 
   return "Component";
 }

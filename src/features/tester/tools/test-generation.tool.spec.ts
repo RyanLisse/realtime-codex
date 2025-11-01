@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { TestTask } from "../types";
-import { testGenerationTool } from "./testGeneration.tool";
+import { testGenerationTool } from "./test-generation.tool";
 
 describe("testGenerationTool", () => {
   it("should generate test cases from test task", async () => {

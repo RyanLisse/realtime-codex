@@ -5,8 +5,8 @@ import type {
   TransportEvent,
 } from "@openai/agents/realtime";
 import { useEffect, useState } from "react";
-import { History } from "@/components/History";
-import { Button } from "@/components/ui/Button";
+import { History } from "@/components/history";
+import { Button } from "@/components/ui/button";
 
 export type AppProps = {
   title?: string;
@@ -15,7 +15,7 @@ export type AppProps = {
   toggleMute: () => void;
   connect: () => void;
   history?: RealtimeItem[];
-  outputGuardrailResult?: OutputGuardrailTripwireTriggered<any> | null;
+  outputGuardrailResult?: OutputGuardrailTripwireTriggered<unknown> | null;
   events: TransportEvent[];
   mcpTools?: string[];
 };
@@ -96,8 +96,10 @@ export function App({
               className="max-h-64 w-96 flex-1 overflow-scroll rounded-lg border border-gray-300 p-4 text-xs md:h-full md:max-h-none [&>details]:border-gray-200 [&>details]:border-b [&>details]:py-2 [&_pre]:bg-gray-100 [&_pre]:p-4 [&_summary]:mb-2"
               id="eventLog"
             >
-              {events.map((event, index) => (
-                <details key={index}>
+              {events.map((event) => (
+                <details
+                  key={`${event.type}-${event.timestamp || Math.random()}`}
+                >
                   <summary>{event.type}</summary>
                   <pre>{JSON.stringify(event, null, 2)}</pre>
                 </details>

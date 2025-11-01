@@ -125,7 +125,7 @@ function extractEndpoints(
 
 function generateAPISpecs(
   endpoints: Array<{ method: string; path: string; description: string }>,
-  requirements: string
+  _requirements: string
 ): BackendArtifact["apis"] {
   return endpoints.map((endpoint, idx) => {
     const parameters: BackendArtifact["apis"][0]["parameters"] = [];
@@ -352,11 +352,13 @@ function generateDatabaseSchemas(
 
 function generateCode(
   apis: BackendArtifact["apis"],
-  requirements: string
+  _requirements: string
 ): BackendArtifact["code"] {
   const code: BackendArtifact["code"] = [];
 
-  if (apis.length === 0) return code;
+  if (apis.length === 0) {
+    return code;
+  }
 
   // Generate route handler file
   const routeHandlers = apis

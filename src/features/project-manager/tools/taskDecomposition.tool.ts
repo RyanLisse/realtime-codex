@@ -124,7 +124,7 @@ function identifyParallelGroups(
     if (!agentGroups.has(subtask.assignedAgent)) {
       agentGroups.set(subtask.assignedAgent, new Set());
     }
-    agentGroups.get(subtask.assignedAgent)!.add(subtask.id);
+    agentGroups.get(subtask.assignedAgent)?.add(subtask.id);
   });
 
   // Find independent agent groups
@@ -134,7 +134,9 @@ function identifyParallelGroups(
     // Check if tasks in this agent group have dependencies on other agent groups
     const hasExternalDeps = Array.from(taskIds).some((taskId) => {
       const subtask = subtasks.find((t) => t.id === taskId);
-      if (!subtask) return false;
+      if (!subtask) {
+        return false;
+      }
 
       return subtask.dependencies.some((depId) => {
         const depSubtask = subtasks.find((t) => t.id === depId);

@@ -1,7 +1,7 @@
 "use client";
 import { useCallback } from "react";
-import { Button } from "@/components/ui/Button";
-import { useCamera } from "@/hooks/useCamera";
+import { Button } from "@/components/ui/button";
+import { useCamera } from "@/hooks/use-camera";
 
 type CameraCaptureProps = {
   onCapture: (dataUrl: string) => void | Promise<void>;
@@ -33,15 +33,13 @@ export function CameraCapture({
     try {
       const dataUrl = await capture();
       await onCapture(dataUrl);
-    } catch (e) {
-      console.error("Capture failed", e);
+    } catch (_e) {
+      // Capture error - user can retry
     }
   }, [capture, onCapture]);
   return (
     <div
-      className={
-        "flex flex-col items-end gap-2 rounded-md p-2" + (className ?? "")
-      }
+      className={`flex flex-col items-end gap-2 rounded-md p-2${className ?? ""}`}
     >
       {/* Always render the video so the ref is ready when start() is called */}
       <video
@@ -78,9 +76,11 @@ export function CameraCapture({
       )}
       {lastPhoto && (
         <img
-          alt="Last captured photo"
+          alt="Last captured"
           className="h-auto w-40 rounded-md border border-gray-300 bg-white shadow-md"
+          height={120}
           src={lastPhoto}
+          width={160}
         />
       )}
     </div>

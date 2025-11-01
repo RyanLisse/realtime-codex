@@ -18,8 +18,6 @@ export async function initializeCodexCliMcpServer() {
     clientSessionTimeoutSeconds: 360_000,
   });
 
-  console.log("Codex MCP server started.");
-
   return codexMcpServer;
 }
 

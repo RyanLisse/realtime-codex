@@ -1,6 +1,6 @@
 import type { RealtimeItem } from "@openai/agents/realtime";
-import { FunctionCallMessage } from "./messages/FunctionCall";
-import { TextMessage } from "./messages/TextMessage";
+import { FunctionCallMessage } from "./messages/function-call";
+import { TextMessage } from "./messages/text-message";
 
 export type HistoryProps = {
   history: RealtimeItem[];

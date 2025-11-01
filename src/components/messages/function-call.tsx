@@ -2,9 +2,9 @@ import type {
   RealtimeMcpCallItem,
   RealtimeToolCallItem,
 } from "@openai/agents/realtime";
-import ClockIcon from "@/components/icons/ClockIcon";
-import FunctionsIcon from "@/components/icons/FunctionsIcon";
-import McpIcon from "../icons/McpIcon";
+import ClockIcon from "@/components/icons/clock-icon";
+import FunctionsIcon from "@/components/icons/functions-icon";
+import McpIcon from "../icons/mcp-icon";
 
 type FunctionCallMessageProps = {
   message: RealtimeToolCallItem | RealtimeMcpCallItem;

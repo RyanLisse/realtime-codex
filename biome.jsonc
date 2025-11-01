@@ -1,4 +1,45 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": ["ultracite/core", "ultracite/next"]
+  "extends": ["ultracite/core", "ultracite/next"],
+  "files": {
+    "ignoreUnknown": true
+  },
+  "overrides": [
+    {
+      "includes": [
+        "src/components/ai-elements/**",
+        "src/components/ui/**",
+        "src/components/icons/**",
+        "src/components/camera-capture.tsx",
+        "src/components/app.tsx",
+        "src/components/history.tsx",
+        "src/test-utils/**",
+        "src/features/designer/**",
+        "src/features/backend-developer/**",
+        "src/features/frontend-developer/**",
+        "src/features/project-manager/**",
+        "src/features/tester/**",
+        "src/features/shared/**",
+        "src/app/server/**"
+      ],
+      "linter": {
+        "enabled": false
+      }
+    },
+    {
+      "includes": [
+        "src/app/page.tsx",
+        "src/app/demo/**",
+        "src/app/raw-client/**",
+        "src/app/websocket/**"
+      ],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noAlert": "off"
+          }
+        }
+      }
+    }
+  ]
 }

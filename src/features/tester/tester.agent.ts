@@ -1,6 +1,6 @@
 import { Agent, tool } from "@openai/agents";
 import { z } from "zod";
-import { testGenerationTool } from "./tools/testGeneration.tool";
+import { testGenerationTool } from "./tools/test-generation.tool";
 
 const testGenerationToolWrapper = tool({
   name: "testGeneration",

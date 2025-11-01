@@ -48,7 +48,7 @@ describe("ProjectManagerAgent", () => {
   });
 
   it("should be able to decompose a task list", async () => {
-    const taskList: TaskList = {
+    const _taskList: TaskList = {
       title: "Test Project",
       tasks: [
         {

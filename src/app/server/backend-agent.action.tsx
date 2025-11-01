@@ -33,6 +33,5 @@ ${JSON.stringify(history, null, 2)}
     ),
   ];
   const result = await runner.run(backendAgent, input);
-  console.log(result.output);
   return JSON.stringify(result.finalOutput);
 }

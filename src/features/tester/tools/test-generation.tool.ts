@@ -1,4 +1,7 @@
-import type { TestPlanArtifact, TestTask } from "../types";
+import type { TestCase, TestPlanArtifact, TestTask } from "../types";
+
+const MAX_TEST_NAME_LENGTH = 50;
+const PERCENTAGE_MULTIPLIER = 100;
 
 export async function testGenerationTool(
   task: TestTask
@@ -75,7 +78,7 @@ function determineTestLevel(
 function generateTestCases(
   acceptanceCriteria: string[],
   requirements: string,
-  testLevel: string
+  _testLevel: string
 ): TestPlanArtifact["testCases"] {
   const testCases: TestPlanArtifact["testCases"] = [];
 
@@ -84,9 +87,9 @@ function generateTestCases(
 
     testCases.push({
       id: `test-case-${idx + 1}`,
-      name: `Test: ${criteria.substring(0, 50)}`,
+      name: `Test: ${criteria.substring(0, MAX_TEST_NAME_LENGTH)}`,
       description: criteria,
-      testType: testType as any,
+      testType,
       steps: generateTestSteps(criteria),
       expectedResult: generateExpectedResult(criteria, testType),
       status: "pending",
@@ -98,8 +101,11 @@ function generateTestCases(
   return testCases;
 }
 
-function getTestType(requirements: string, criteria: string): string {
-  const combined = (requirements + " " + criteria).toLowerCase();
+function getTestType(
+  requirements: string,
+  criteria: string
+): TestCase["testType"] {
+  const combined = `${requirements} ${criteria}`.toLowerCase();
 
   if (
     combined.includes("api") ||
@@ -150,7 +156,7 @@ function generateTestSteps(
   return steps;
 }
 
-function generateExpectedResult(criteria: string, testType: string): string {
+function generateExpectedResult(criteria: string, _testType: string): string {
   const lowerCriteria = criteria.toLowerCase();
 
   if (lowerCriteria.includes("render")) {
@@ -207,22 +213,35 @@ function extractTags(requirements: string): string[] {
   const tags: string[] = [];
   const lowerReq = requirements.toLowerCase();
 
-  if (lowerReq.includes("component")) tags.push("component");
-  if (lowerReq.includes("api")) tags.push("api");
-  if (lowerReq.includes("form")) tags.push("form");
-  if (lowerReq.includes("button")) tags.push("button");
-  if (lowerReq.includes("input")) tags.push("input");
-  if (lowerReq.includes("authentication") || lowerReq.includes("auth"))
+  if (lowerReq.includes("component")) {
+    tags.push("component");
+  }
+  if (lowerReq.includes("api")) {
+    tags.push("api");
+  }
+  if (lowerReq.includes("form")) {
+    tags.push("form");
+  }
+  if (lowerReq.includes("button")) {
+    tags.push("button");
+  }
+  if (lowerReq.includes("input")) {
+    tags.push("input");
+  }
+  if (lowerReq.includes("authentication") || lowerReq.includes("auth")) {
     tags.push("authentication");
-  if (lowerReq.includes("user")) tags.push("user");
+  }
+  if (lowerReq.includes("user")) {
+    tags.push("user");
+  }
 
   return tags;
 }
 
 function generateBasicTests(
   task: TestTask,
-  requirements: string,
-  testLevel: string
+  _requirements: string,
+  _testLevel: string
 ): TestPlanArtifact["testCases"] {
   const testCases: TestPlanArtifact["testCases"] = [];
 
@@ -232,7 +251,7 @@ function generateBasicTests(
       id: "test-case-basic-1",
       name: "Component renders correctly",
       description: "Verify that the component renders without errors",
-      testType: "unit" as any,
+      testType: "unit",
       steps: [
         {
           step: "Mount component",
@@ -250,7 +269,7 @@ function generateBasicTests(
       id: "test-case-basic-2",
       name: "Component accepts props",
       description: "Verify that the component accepts and uses props correctly",
-      testType: "unit" as any,
+      testType: "unit",
       steps: [
         {
           step: "Pass props to component",
@@ -273,7 +292,7 @@ function generateBasicTests(
       id: "test-case-api-1",
       name: "API endpoint responds correctly",
       description: "Verify that the API endpoint responds with correct status",
-      testType: "integration" as any,
+      testType: "integration",
       steps: [
         { step: "Send request to API", expectedResult: "Request is sent" },
         { step: "Receive response", expectedResult: "Response is received" },
@@ -312,7 +331,8 @@ function calculateCoverage(
   return {
     total,
     covered,
-    percentage: total > 0 ? Math.round((covered / total) * 100) : 0,
+    percentage:
+      total > 0 ? Math.round((covered / total) * PERCENTAGE_MULTIPLIER) : 0,
   };
 }
 

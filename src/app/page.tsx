@@ -14,9 +14,9 @@ import {
 } from "@openai/agents/realtime";
 import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
-import { App } from "@/components/App";
-import { CameraCapture } from "@/components/CameraCapture";
-import { handleRefundRequest } from "./server/backendAgent.action";
+import { App } from "@/components/app";
+import { CameraCapture } from "@/components/camera-capture";
+import { handleRefundRequest } from "./server/backend-agent.action";
 import { getToken } from "./server/token.action";
 
 const params = z.object({
@@ -26,7 +26,7 @@ const refundBackchannel = tool<typeof params, RealtimeContextData>({
   name: "Refund Expert",
   description: "Evaluate a refund",
   parameters: params,
-  execute: async ({ request }, details) => {
+  execute: ({ request }, details) => {
     const history: RealtimeItem[] = details?.context?.history ?? [];
     return handleRefundRequest(request, history);
   },
@@ -82,7 +82,7 @@ const agent = new RealtimeAgent({
 const guardrails: RealtimeOutputGuardrail[] = [
   {
     name: "No mention of Dom",
-    execute: async ({ agentOutput }) => {
+    execute: ({ agentOutput }) => {
       const domInOutput = agentOutput.includes("Dom");
       return {
         tripwireTriggered: domInOutput,
@@ -95,11 +95,11 @@ const guardrails: RealtimeOutputGuardrail[] = [
 ];
 
 export default function Home() {
-  const session = useRef<RealtimeSession<any> | null>(null);
+  const session = useRef<RealtimeSession<unknown> | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [outputGuardrailResult, setOutputGuardrailResult] =
-    useState<OutputGuardrailTripwireTriggered<any> | null>(null);
+    useState<OutputGuardrailTripwireTriggered<unknown> | null>(null);
 
   const [events, setEvents] = useState<TransportEvent[]>([]);
   const [history, setHistory] = useState<RealtimeItem[]>([]);
@@ -121,7 +121,7 @@ export default function Home() {
       },
     });
     session.current.on("transport_event", (event) => {
-      setEvents((events) => [...events, event]);
+      setEvents((prevEvents) => [...prevEvents, event]);
     });
     session.current.on("mcp_tools_changed", (tools) => {
       setMcpTools(tools.map((t) => t.name));
@@ -132,8 +132,8 @@ export default function Home() {
         setOutputGuardrailResult(guardrailError);
       }
     );
-    session.current.on("history_updated", (history) => {
-      setHistory(history);
+    session.current.on("history_updated", (updatedHistory) => {
+      setHistory(updatedHistory);
     });
     session.current.on(
       "tool_approval_requested",
@@ -162,8 +162,8 @@ export default function Home() {
           apiKey: token,
         });
         setIsConnected(true);
-      } catch (error) {
-        console.error("Error connecting to session", error);
+      } catch (_error) {
+        // Connection error - user can retry
       }
     }
   }
@@ -194,7 +194,9 @@ export default function Home() {
         <CameraCapture
           disabled={!isConnected}
           onCapture={(dataUrl) => {
-            if (!session.current) return;
+            if (!session.current) {
+              return;
+            }
             session.current.addImage(dataUrl, { triggerResponse: false });
           }}
         />
