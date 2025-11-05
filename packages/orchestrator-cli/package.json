@@ -1,0 +1,22 @@
+{
+  "name": "@repo/orchestrator-cli",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "bin": {
+    "orchestrator": "./src/index.ts"
+  },
+  "dependencies": {
+    "@repo/orchestrator": "workspace:*",
+    "@repo/agent-codex": "workspace:*",
+    "@repo/agent-claude-code": "workspace:*",
+    "@repo/agent-gemini-browser": "workspace:*",
+    "@repo/agent-backend-dev": "workspace:*",
+    "@repo/agent-frontend-dev": "workspace:*",
+    "@repo/agent-tester": "workspace:*",
+    "@repo/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5"
+  }
+}

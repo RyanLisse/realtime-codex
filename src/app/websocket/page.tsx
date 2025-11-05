@@ -14,24 +14,14 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { WavRecorder, WavStreamPlayer } from "wavtools";
 import { z } from "zod";
-import { App } from "@/components/App";
-import { CameraCapture } from "@/components/CameraCapture";
-import { handleRefundRequest } from "../server/backendAgent.action";
+import { App } from "@/components/app";
+import { CameraCapture } from "@/components/camera-capture";
 import { getToken } from "../server/token.action";
-
-const refundBackchannel = tool({
-  name: "refundBackchannel",
-  description: "Evaluate a refund",
-  parameters: z.object({
-    request: z.string(),
-  }),
-  execute: async ({ request }) => handleRefundRequest(request),
-});
 
 const guardrails: RealtimeOutputGuardrail[] = [
   {
     name: "No mention of Dom",
-    execute: async ({ agentOutput }) => {
+    execute: ({ agentOutput }) => {
       const domInOutput = agentOutput.includes("Dom");
       return {
         tripwireTriggered: domInOutput,
@@ -100,7 +90,7 @@ export default function Home() {
   const [isConnected, setIsConnected] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [outputGuardrailResult, setOutputGuardrailResult] =
-    useState<OutputGuardrailTripwireTriggered<any> | null>(null);
+    useState<OutputGuardrailTripwireTriggered<unknown> | null>(null);
   const [events, setEvents] = useState<TransportEvent[]>([]);
   const [history, setHistory] = useState<RealtimeItem[]>([]);
   const [mcpTools, setMcpTools] = useState<string[]>([]);
@@ -127,7 +117,7 @@ export default function Home() {
     });
 
     session.current.on("transport_event", (event) => {
-      setEvents((events) => [...events, event]);
+      setEvents((prevEvents) => [...prevEvents, event]);
     });
 
     session.current.on("audio_interrupted", () => {
@@ -136,12 +126,12 @@ export default function Home() {
       player.current?.interrupt();
     });
 
-    session.current.on("history_updated", (history) => {
-      setHistory(history);
+    session.current.on("history_updated", (updatedHistory) => {
+      setHistory(updatedHistory);
     });
 
-    session.current.on("error", (error) => {
-      console.error("error", error);
+    session.current.on("error", (_error) => {
+      // Error handled by session
     });
 
     session.current.on(
@@ -171,7 +161,7 @@ export default function Home() {
 
     session.current.on(
       "mcp_tool_call_completed",
-      (_context, _agent, toolCall) => {
+      (_context, _agent, _toolCall) => {
         session.current?.transport?.sendEvent({
           type: "response.create",
         });
@@ -230,7 +220,9 @@ export default function Home() {
         <CameraCapture
           disabled={!isConnected}
           onCapture={(dataUrl) => {
-            if (!session.current) return;
+            if (!session.current) {
+              return;
+            }
             session.current.addImage(dataUrl, { triggerResponse: false });
           }}
         />

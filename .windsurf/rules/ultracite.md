@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 Avoid `accessKey` attr and distracting els
 No `aria-hidden="true"` on focusable els
 No ARIA roles, states, props on unsupported els

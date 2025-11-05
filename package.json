@@ -1,11 +1,16 @@
 {
   "name": "realtime-next",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "node ./scripts/next-build.cjs",
     "start": "next start",
     "lint": "next lint",
+    "type-check": "node ./scripts/type-check-monorepo.cjs",
+    "test:packages": "bun test packages/**/*.test.ts",
     "build-check": "tsc --noEmit",
     "test": "vitest",
     "test:ui": "vitest --ui",
@@ -54,6 +59,7 @@
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

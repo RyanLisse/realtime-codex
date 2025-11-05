@@ -5,7 +5,7 @@ import {
   type TransportEvent,
 } from "@openai/agents/realtime";
 import { useEffect, useRef, useState } from "react";
-import { App } from "@/components/App";
+import { App } from "@/components/app";
 import { getToken } from "../server/token.action";
 
 export default function Home() {
@@ -20,7 +20,7 @@ export default function Home() {
       useInsecureApiKey: true,
     });
     connection.current.on("*", (event) => {
-      setEvents((events) => [...events, event]);
+      setEvents((prevEvents) => [...prevEvents, event]);
     });
   }, []);
 
