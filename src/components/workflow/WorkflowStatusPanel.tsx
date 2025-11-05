@@ -1,9 +1,12 @@
 "use client";
 
-import { AgentType, type Workflow } from "@/features/workflow/types/workflow.types";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import {
+  AgentType,
+  type Workflow,
+} from "@/features/workflow/types/workflow.types";
 
 interface WorkflowStatusPanelProps {
   workflow: Workflow;
@@ -56,9 +59,9 @@ export function WorkflowStatusPanel({ workflow }: WorkflowStatusPanelProps) {
     }));
 
   return (
-    <Card className="p-6 space-y-4">
+    <Card className="space-y-4 p-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Workflow Status</h3>
+        <h3 className="font-semibold text-lg">Workflow Status</h3>
         <Badge className={getStatusColor(workflow.status)}>
           {workflow.status}
         </Badge>
@@ -69,15 +72,15 @@ export function WorkflowStatusPanel({ workflow }: WorkflowStatusPanelProps) {
           <span>Progress</span>
           <span>{Math.round(progress)}%</span>
         </div>
-        <Progress value={progress} className="h-2" />
-        <div className="text-xs text-gray-500">
+        <Progress className="h-2" value={progress} />
+        <div className="text-gray-500 text-xs">
           {completedTasks} of {totalTasks} tasks completed
         </div>
       </div>
 
       {currentAgent && (
         <div className="space-y-2">
-          <div className="text-sm font-medium">Current Agent</div>
+          <div className="font-medium text-sm">Current Agent</div>
           <Badge className={getAgentBadgeColor(currentAgent)}>
             {currentAgent}
           </Badge>
@@ -86,12 +89,12 @@ export function WorkflowStatusPanel({ workflow }: WorkflowStatusPanelProps) {
 
       {routingDecisions.length > 0 && (
         <div className="space-y-2">
-          <div className="text-sm font-medium">Routing Decisions</div>
+          <div className="font-medium text-sm">Routing Decisions</div>
           <div className="space-y-1">
             {routingDecisions.slice(-5).map((decision, index) => (
               <div
+                className="flex items-center gap-2 text-gray-600 text-xs"
                 key={index}
-                className="text-xs text-gray-600 flex items-center gap-2"
               >
                 <span className="font-mono">
                   {decision.from} → {decision.to}
@@ -107,15 +110,15 @@ export function WorkflowStatusPanel({ workflow }: WorkflowStatusPanelProps) {
 
       {workflow.completedTasks.length > 0 && (
         <div className="space-y-2">
-          <div className="text-sm font-medium">Completed Agents</div>
+          <div className="font-medium text-sm">Completed Agents</div>
           <div className="flex flex-wrap gap-2">
             {Array.from(
               new Set(workflow.completedTasks.map((t) => t.assignedAgent))
             ).map((agent) => (
               <Badge
+                className={getAgentBadgeColor(agent)}
                 key={agent}
                 variant="outline"
-                className={getAgentBadgeColor(agent)}
               >
                 {agent}
               </Badge>
@@ -126,7 +129,7 @@ export function WorkflowStatusPanel({ workflow }: WorkflowStatusPanelProps) {
 
       {workflow.taskQueue.length > 0 && (
         <div className="space-y-2">
-          <div className="text-sm font-medium">Pending Agents</div>
+          <div className="font-medium text-sm">Pending Agents</div>
           <div className="flex flex-wrap gap-2">
             {Array.from(
               new Set(workflow.taskQueue.map((t) => t.assignedAgent))
@@ -141,4 +144,3 @@ export function WorkflowStatusPanel({ workflow }: WorkflowStatusPanelProps) {
     </Card>
   );
 }
-

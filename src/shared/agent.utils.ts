@@ -1,9 +1,9 @@
 import { Agent, tool } from "@openai/agents";
 import { z } from "zod";
-import { WorkflowCoordinator } from "@/features/workflow/services/workflowCoordinator";
-import { FileWorkflowPersistence } from "@/features/workflow/services/workflowPersistence";
-import { WorkflowEventBus } from "@/features/workflow/services/workflowEventBus";
 import { TaskRouter } from "@/features/workflow/services/taskRouter";
+import { WorkflowCoordinator } from "@/features/workflow/services/workflowCoordinator";
+import { WorkflowEventBus } from "@/features/workflow/services/workflowEventBus";
+import { FileWorkflowPersistence } from "@/features/workflow/services/workflowPersistence";
 
 type AgentConfig = {
   name: string;
@@ -50,7 +50,7 @@ export function createWorkflowServiceFactory(): WorkflowServiceFactory {
   const persistence = new FileWorkflowPersistence("./workflows");
   const eventBus = new WorkflowEventBus();
   const taskRouter = new TaskRouter();
-  
+
   const coordinator = new WorkflowCoordinator({
     persistence,
     eventBus,

@@ -1,9 +1,9 @@
 import { getCapabilityKeywords } from "../config/agentCapabilities";
 import {
   AgentType,
+  type TaskRouter as ITaskRouter,
   type Task,
   type TaskId,
-  type TaskRouter as ITaskRouter,
   TaskStatus,
   type WorkflowId,
 } from "../types/workflow.types";
@@ -131,9 +131,7 @@ export class TaskRouter implements ITaskRouter {
           estimatedDuration: this.estimateGroupDuration(intersecting),
         };
       })
-      .filter((group) => {
-        return group.tasks.length > 0;
-      });
+      .filter((group) => group.tasks.length > 0);
   }
 
   /**
@@ -336,7 +334,8 @@ export class TaskRouter implements ITaskRouter {
       }
     }
 
-    const successRate = results.length > 0 ? successful.length / results.length : 0;
+    const successRate =
+      results.length > 0 ? successful.length / results.length : 0;
 
     return {
       successful,

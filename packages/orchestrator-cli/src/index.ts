@@ -42,7 +42,10 @@ async function main() {
   try {
     await handleCommand(command, args.slice(1), orchestrator);
   } catch (error) {
-    console.error("Error:", error instanceof Error ? error.message : "Unknown error");
+    console.error(
+      "Error:",
+      error instanceof Error ? error.message : "Unknown error"
+    );
     process.exit(1);
   }
 }
@@ -52,4 +55,3 @@ main().catch((error) => {
   console.error("Fatal error:", error);
   process.exit(1);
 });
-

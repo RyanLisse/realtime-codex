@@ -3,8 +3,7 @@
 
 export * from "./actions/workflow.actions";
 export * from "./hooks/useWorkflow";
-export * from "./types/workflow.types";
-
 // Export services individually to avoid duplicates
 export { TaskRouter } from "./services/taskRouter";
 export { WorkflowCoordinator } from "./services/workflowCoordinator";
+export * from "./types/workflow.types";

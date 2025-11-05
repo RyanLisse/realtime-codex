@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { WorkflowEventBus } from "../workflowEventBus";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AgentType, type WorkflowEvent } from "../../types/workflow.types";
+import { WorkflowEventBus } from "../workflowEventBus";
 
 describe("WorkflowEventBus - Parallel Execution Events", () => {
   let eventBus: WorkflowEventBus;
@@ -193,14 +193,7 @@ describe("WorkflowEventBus - Parallel Execution Events", () => {
       });
 
       // Test progress < 0
-      eventBus.emitParallelExecutionUpdate(
-        "workflow-456",
-        3,
-        3,
-        0,
-        0,
-        -10
-      );
+      eventBus.emitParallelExecutionUpdate("workflow-456", 3, 3, 0, 0, -10);
 
       expect(events2[0].data).toMatchObject({
         overallProgress: 0,
@@ -366,7 +359,9 @@ describe("WorkflowEventBus - Parallel Execution Events", () => {
   describe("Error handling", () => {
     it("should handle subscriber errors gracefully for branch progress", () => {
       const events: WorkflowEvent[] = [];
-      const consoleWarnSpy = vi.spyOn(process, "emitWarning").mockImplementation(() => {});
+      const consoleWarnSpy = vi
+        .spyOn(process, "emitWarning")
+        .mockImplementation(() => {});
 
       eventBus.subscribe(workflowId, () => {
         throw new Error("Subscriber error");
@@ -391,7 +386,9 @@ describe("WorkflowEventBus - Parallel Execution Events", () => {
 
     it("should handle subscriber errors gracefully for parallel execution", () => {
       const events: WorkflowEvent[] = [];
-      const consoleWarnSpy = vi.spyOn(process, "emitWarning").mockImplementation(() => {});
+      const consoleWarnSpy = vi
+        .spyOn(process, "emitWarning")
+        .mockImplementation(() => {});
 
       eventBus.subscribe(workflowId, () => {
         throw new Error("Subscriber error");
@@ -475,16 +472,9 @@ describe("WorkflowEventBus - Parallel Execution Events", () => {
       );
 
       // Update parallel execution
-      eventBus.emitParallelExecutionUpdate(
-        workflowId,
-        3,
-        3,
-        0,
-        0,
-        28,
-        5000,
-        [AgentType.BACKEND]
-      );
+      eventBus.emitParallelExecutionUpdate(workflowId, 3, 3, 0, 0, 28, 5000, [
+        AgentType.BACKEND,
+      ]);
 
       // Complete designer branch
       eventBus.emitBranchProgress(
@@ -532,7 +522,9 @@ describe("WorkflowEventBus - Parallel Execution Events", () => {
       eventBus.emitParallelExecutionUpdate(workflowId, 3, 0, 2, 1, 86);
 
       // Verify event sequence
-      const branchEvents = allEvents.filter((e) => e.type === "branch_progress");
+      const branchEvents = allEvents.filter(
+        (e) => e.type === "branch_progress"
+      );
       const parallelEvents = allEvents.filter(
         (e) => e.type === "parallel_execution_update"
       );

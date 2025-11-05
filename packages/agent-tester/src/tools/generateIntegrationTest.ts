@@ -1,5 +1,5 @@
-import { z } from "zod";
 import { tool } from "ai";
+import { z } from "zod";
 
 /**
  * Generate integration test tool parameters schema
@@ -10,7 +10,9 @@ const GenerateIntegrationTestParamsSchema = z.object({
   description: z.string().optional(),
 });
 
-export type GenerateIntegrationTestParams = z.infer<typeof GenerateIntegrationTestParamsSchema>;
+export type GenerateIntegrationTestParams = z.infer<
+  typeof GenerateIntegrationTestParamsSchema
+>;
 
 /**
  * Generate integration test tool response schema
@@ -22,7 +24,9 @@ const GenerateIntegrationTestResponseSchema = z.object({
   error: z.string().optional(),
 });
 
-export type GenerateIntegrationTestResponse = z.infer<typeof GenerateIntegrationTestResponseSchema>;
+export type GenerateIntegrationTestResponse = z.infer<
+  typeof GenerateIntegrationTestResponseSchema
+>;
 
 /**
  * Generate integration test tool
@@ -57,4 +61,3 @@ describe("${params.testName}", () => {
     }
   },
 });
-

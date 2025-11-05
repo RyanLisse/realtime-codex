@@ -4,12 +4,16 @@
  */
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { navigateTool } from "./tools/navigate.js";
-import { clickTool } from "./tools/click.js";
-import { createExecutionContext, initializeBrowser, executeBrowserAction, cleanupBrowser, type ExecutionContext } from "./execution.js";
-import { createPlan, validatePlan, type PlanStep } from "./core/planning.js";
 import type { AgentSession } from "@repo/shared";
 import { nanoid } from "nanoid";
+import { createPlan, validatePlan } from "./core/planning.js";
+import {
+  cleanupBrowser,
+  createExecutionContext,
+  type ExecutionContext,
+  executeBrowserAction,
+  initializeBrowser,
+} from "./execution.js";
 
 /**
  * GeminiAgent configuration
@@ -85,10 +89,11 @@ export class GeminiAgent {
     // Side effects isolated: Execute plan steps
     const results = [];
     for (const step of plan) {
-      const action = step.action === "navigate" 
-        ? { type: "navigate" as const, url: step.target }
-        : { type: "click" as const, selector: step.target };
-      
+      const action =
+        step.action === "navigate"
+          ? { type: "navigate" as const, url: step.target }
+          : { type: "click" as const, selector: step.target };
+
       const result = await executeBrowserAction(action, this.executionContext);
       results.push(result);
     }

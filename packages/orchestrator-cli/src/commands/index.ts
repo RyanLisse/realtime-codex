@@ -3,9 +3,9 @@
  */
 
 import type { AgentOrchestrator } from "@repo/orchestrator";
-import { handleListAgents } from "./listAgents.js";
-import { handleCreateAgent } from "./createAgent.js";
 import { handleCommandAgent } from "./commandAgent.js";
+import { handleCreateAgent } from "./createAgent.js";
+import { handleListAgents } from "./listAgents.js";
 
 /**
  * Handle CLI command
@@ -31,4 +31,3 @@ export async function handleCommand(
       process.exit(1);
   }
 }
-

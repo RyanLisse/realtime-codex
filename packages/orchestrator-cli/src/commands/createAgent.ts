@@ -11,7 +11,9 @@ export async function handleCreateAgent(
 ): Promise<void> {
   if (args.length < 2) {
     console.error("Usage: orchestrator create <type> <name>");
-    console.error("Types: codex, claude-code, gemini-browser, backend-dev, frontend-dev, tester");
+    console.error(
+      "Types: codex, claude-code, gemini-browser, backend-dev, frontend-dev, tester"
+    );
     process.exit(1);
   }
 
@@ -26,4 +28,3 @@ export async function handleCreateAgent(
   console.log(`  Name: ${name}`);
   console.log(`  Status: ${agent.status}`);
 }
-

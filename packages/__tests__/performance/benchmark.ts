@@ -1,6 +1,6 @@
 /**
  * Performance benchmarks comparing Python vs TypeScript implementations
- * 
+ *
  * Note: This is a placeholder structure for future benchmarking.
  * Actual benchmarks would require:
  * 1. Python implementation to compare against
@@ -9,8 +9,8 @@
  */
 
 import { describe, it } from "bun:test";
-import { AgentOrchestrator } from "@repo/orchestrator";
 import { CodexAgent } from "@repo/agent-codex";
+import { AgentOrchestrator } from "@repo/orchestrator";
 
 describe("Performance Benchmarks", () => {
   describe("Orchestrator Initialization", () => {
@@ -67,7 +67,7 @@ describe("Performance Benchmarks", () => {
       // 1. Python implementation running
       // 2. Side-by-side performance measurements
       // 3. Statistical significance testing
-      
+
       const benchmarkStructure = {
         metrics: [
           "Initialization time",
@@ -114,4 +114,3 @@ export class BenchmarkRunner {
     this.results = [];
   }
 }
-

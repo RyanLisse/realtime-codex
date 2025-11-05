@@ -60,4 +60,3 @@ export function addMessageToSession(
     updatedAt: new Date(),
   };
 }
-

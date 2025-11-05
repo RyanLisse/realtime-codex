@@ -2,7 +2,7 @@
  * Unit tests for createAgent tool
  */
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { createAgentTool } from "../createAgent.js";
 
 describe("createAgentTool", () => {
@@ -23,4 +23,3 @@ describe("createAgentTool", () => {
     expect(result.success).toBe(false);
   });
 });
-

@@ -9,8 +9,14 @@ export default defineConfig({
     globals: true,
     setupFiles: ["./src/test-utils/setup.ts"],
     include: ["**/*.spec.{ts,tsx}"],
-    testTimeout: 10000, // 10 seconds default timeout
-    hookTimeout: 10000, // 10 seconds for hooks
+    exclude: [
+      "**/*.e2e.spec.{ts,tsx}",
+      "**/node_modules/**",
+      "**/.next/**",
+      "**/dist/**",
+    ],
+    testTimeout: 10_000, // 10 seconds default timeout
+    hookTimeout: 10_000, // 10 seconds for hooks
     teardownTimeout: 5000, // 5 seconds for teardown
     threads: true, // Enable parallel execution
     isolate: true, // Isolate each test file

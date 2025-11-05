@@ -95,7 +95,8 @@ export function useWorkflow(workflowId: WorkflowId): UseWorkflowReturn {
             }
 
             if (event.type === "branch_progress") {
-              const branchMetrics = event.data as unknown as BranchProgressMetrics;
+              const branchMetrics =
+                event.data as unknown as BranchProgressMetrics;
               setBranchProgress((prev) => {
                 const existing = prev.findIndex(
                   (b) => b.branchId === branchMetrics.branchId

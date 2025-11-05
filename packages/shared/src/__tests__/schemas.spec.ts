@@ -2,10 +2,10 @@
  * Unit tests for shared package schemas
  */
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { EnvSchema } from "../schemas/env.js";
-import { ToolParamsSchema, ToolResponseSchema } from "../schemas/tools.js";
 import { AgentSessionSchema } from "../schemas/session.js";
+import { ToolParamsSchema, ToolResponseSchema } from "../schemas/tools.js";
 
 describe("EnvSchema", () => {
   it("should validate required environment variables", () => {
@@ -97,4 +97,3 @@ describe("AgentSessionSchema", () => {
     expect(result.success).toBe(true);
   });
 });
-

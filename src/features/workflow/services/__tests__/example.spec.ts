@@ -12,7 +12,7 @@ function processTask(task: { id: string; description: string }): {
   processed: boolean;
   result: string;
 } {
-  if (!task.id || !task.description) {
+  if (!(task.id && task.description)) {
     throw new Error("Task must have id and description");
   }
 
@@ -59,5 +59,3 @@ describe("Example Unit Test", () => {
     expect(duration).toBeLessThan(1000); // Should complete in under 1 second
   });
 });
-
-

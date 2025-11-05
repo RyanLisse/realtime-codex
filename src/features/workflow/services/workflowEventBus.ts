@@ -135,7 +135,7 @@ export class WorkflowEventBus implements IWorkflowEventBus {
     completedAt?: Date
   ): string | undefined {
     if (!startedAt) {
-      return undefined;
+      return;
     }
 
     const end = completedAt || new Date();
@@ -255,7 +255,8 @@ export class WorkflowEventBus implements IWorkflowEventBus {
       failedBranches,
       overallProgress: Math.min(100, Math.max(0, overallProgress)), // Clamp 0-100
       estimatedTimeRemaining,
-      bottlenecks: bottlenecks && bottlenecks.length > 0 ? bottlenecks : undefined,
+      bottlenecks:
+        bottlenecks && bottlenecks.length > 0 ? bottlenecks : undefined,
     };
 
     this.parallelMetrics.set(workflowId, metrics);

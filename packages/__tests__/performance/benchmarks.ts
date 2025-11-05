@@ -1,6 +1,6 @@
 /**
  * Performance benchmarks comparing Python vs TypeScript implementations
- * 
+ *
  * This module provides benchmarking utilities and test cases for validating
  * that TypeScript implementations meet or exceed Python performance.
  */
@@ -27,11 +27,11 @@ export async function benchmark(
   iterations = 1000
 ): Promise<BenchmarkResult> {
   const start = performance.now();
-  
+
   for (let i = 0; i < iterations; i++) {
     await fn();
   }
-  
+
   const end = performance.now();
   const totalTime = end - start;
   const averageTime = totalTime / iterations;
@@ -58,7 +58,8 @@ export function compareBenchmarks(
   improvement: number;
 } {
   const speedup = python.averageTime / typescript.averageTime;
-  const improvement = ((python.averageTime - typescript.averageTime) / python.averageTime) * 100;
+  const improvement =
+    ((python.averageTime - typescript.averageTime) / python.averageTime) * 100;
 
   return {
     faster: speedup > 1 ? "typescript" : speedup < 1 ? "python" : "equal",
@@ -130,4 +131,3 @@ export function validateBenchmark(
     result.opsPerSecond >= requirements.minOpsPerSecond
   );
 }
-

@@ -76,4 +76,3 @@ export async function fileExists(filePath: string): Promise<boolean> {
 export async function getFileStats(filePath: string) {
   return await fs.stat(filePath);
 }
-

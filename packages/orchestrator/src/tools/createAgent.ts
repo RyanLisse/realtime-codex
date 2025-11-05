@@ -25,11 +25,14 @@ export type CreateAgentParams = z.infer<typeof CreateAgentParamsSchema>;
  * Create agent tool response schema
  */
 const CreateAgentResponseSchema = z.object({
-  id: z.string(),
-  type: z.string(),
-  status: z.string(),
-  name: z.string(),
-  createdAt: z.coerce.date(),
+  success: z.boolean(),
+  agentId: z.string().optional(),
+  error: z.string().optional(),
+  id: z.string().optional(),
+  type: z.string().optional(),
+  status: z.string().optional(),
+  name: z.string().optional(),
+  createdAt: z.coerce.date().optional(),
 });
 
 export type CreateAgentResponse = z.infer<typeof CreateAgentResponseSchema>;
@@ -43,10 +46,31 @@ export const createAgentTool = tool({
     "Create a new agent instance of the specified type (codex, claude-code, gemini-browser, etc.)",
   parameters: CreateAgentParamsSchema,
   execute: async (params) => {
+    // Validate agent type
+    const validTypes = [
+      "claude-code",
+      "gemini-browser",
+      "codex",
+      "backend-dev",
+      "frontend-dev",
+      "tester",
+      "orchestrator",
+    ];
+
+    if (!validTypes.includes(params.type)) {
+      return {
+        success: false,
+        error: `Invalid agent type: ${params.type}`,
+      } satisfies CreateAgentResponse;
+    }
+
     // This will be implemented by AgentManager
     // For now, return placeholder response
+    const agentId = `agent-${Date.now()}`;
     return {
-      id: `agent-${Date.now()}`,
+      success: true,
+      agentId,
+      id: agentId,
       type: params.type,
       status: "idle",
       name: params.name,

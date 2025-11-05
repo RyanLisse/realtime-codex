@@ -12,15 +12,15 @@ const CAPABILITY_KEYWORDS: Record<AgentType, CapabilityRule> = {
     keywords: ["design", "ui", "ux", "mockup", "wireframe", "visual", "layout"],
   },
   [AgentType.FRONTEND]: {
-  keywords: [
-  "frontend",
-  "component",
-  "react",
-  "interface",
-  "page",
-  "screen",
-  "css",
-  ],
+    keywords: [
+      "frontend",
+      "component",
+      "react",
+      "interface",
+      "page",
+      "screen",
+      "css",
+    ],
   },
   [AgentType.BACKEND]: {
     keywords: [

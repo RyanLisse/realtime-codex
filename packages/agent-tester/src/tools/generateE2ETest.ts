@@ -1,12 +1,14 @@
-import { z } from "zod";
 import { tool } from "ai";
+import { z } from "zod";
 
 /**
  * Generate E2E test tool parameters schema
  */
 const GenerateE2ETestParamsSchema = z.object({
   testName: z.string().min(1, "Test name is required"),
-  testFramework: z.enum(["playwright", "cypress", "puppeteer"]).default("playwright"),
+  testFramework: z
+    .enum(["playwright", "cypress", "puppeteer"])
+    .default("playwright"),
   description: z.string().optional(),
 });
 
@@ -22,7 +24,9 @@ const GenerateE2ETestResponseSchema = z.object({
   error: z.string().optional(),
 });
 
-export type GenerateE2ETestResponse = z.infer<typeof GenerateE2ETestResponseSchema>;
+export type GenerateE2ETestResponse = z.infer<
+  typeof GenerateE2ETestResponseSchema
+>;
 
 /**
  * Generate E2E test tool
@@ -55,4 +59,3 @@ test("${params.testName}", async ({ page }) => {
     }
   },
 });
-

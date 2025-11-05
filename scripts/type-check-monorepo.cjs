@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+"use strict";
 /**
  * Type-check monorepo packages individually to avoid memory issues
  */
@@ -56,4 +57,3 @@ if (hasErrors) {
   console.log("✅ All packages passed type checking");
   process.exit(0);
 }
-

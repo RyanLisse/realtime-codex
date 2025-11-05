@@ -196,7 +196,9 @@ describe("WorkflowCoordinator - Parallel Task Execution", () => {
     const testerActive = findPendingTask(workflow, AgentType.TESTER);
     expect(testerActive?.status).toBe(TaskStatus.ACTIVE);
 
-    expect(workflow?.completedTasks.map((task) => task.assignedAgent).sort()).toEqual(
+    expect(
+      workflow?.completedTasks.map((task) => task.assignedAgent).sort()
+    ).toEqual(
       [AgentType.PROJECT_MANAGER, AgentType.BACKEND, AgentType.FRONTEND].sort()
     );
   });
@@ -445,7 +447,11 @@ describe("WorkflowCoordinator - Parallel Task Execution", () => {
   it("persists parallel task state correctly", async () => {
     const params: CreateWorkflowParams = {
       description: "Dual implementation project with frontend and backend API",
-      requirements: ["Build frontend components", "Build backend API", "Integrate"],
+      requirements: [
+        "Build frontend components",
+        "Build backend API",
+        "Integrate",
+      ],
     };
 
     const workflowId = await coordinator.createWorkflow(params);

@@ -1,9 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { AgentType, type Task, TaskStatus } from "../../types/workflow.types";
-import {
-  TaskRouter,
-  type ParallelExecutionResult,
-} from "../taskRouter";
+import { type ParallelExecutionResult, TaskRouter } from "../taskRouter";
 
 describe("TaskRouter - Concurrent Scheduling", () => {
   let router: TaskRouter;

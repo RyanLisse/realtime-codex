@@ -1,14 +1,11 @@
 /**
  * Performance benchmarks comparing Python vs TypeScript implementations
- * 
+ *
  * These benchmarks measure actual performance metrics for TypeScript implementation.
  * Python baseline comparison should be added when Python test suite is available.
  */
 
 import { describe, expect, it } from "bun:test";
-import { CodexAgent } from "../../agent-codex/src/CodexAgent.js";
-import { AgentOrchestrator } from "../../orchestrator/src/AgentOrchestrator.js";
-import { listAgentsTool } from "../../orchestrator/src/tools/listAgents.js";
 
 describe("Performance Benchmarks", () => {
   it("should benchmark agent initialization time", () => {
@@ -32,7 +29,9 @@ describe("Performance Benchmarks", () => {
     expect(avgTime).toBeLessThan(10); // Average initialization time
     expect(maxTime).toBeLessThan(50); // Max initialization time
 
-    console.log(`Agent initialization: avg=${avgTime.toFixed(2)}ms, min=${minTime.toFixed(2)}ms, max=${maxTime.toFixed(2)}ms`);
+    console.log(
+      `Agent initialization: avg=${avgTime.toFixed(2)}ms, min=${minTime.toFixed(2)}ms, max=${maxTime.toFixed(2)}ms`
+    );
   });
 
   it("should benchmark tool execution latency", () => {
@@ -55,7 +54,9 @@ describe("Performance Benchmarks", () => {
     expect(avgTime).toBeLessThan(5);
     expect(maxTime).toBeLessThan(20);
 
-    console.log(`Tool execution: avg=${avgTime.toFixed(2)}ms, max=${maxTime.toFixed(2)}ms`);
+    console.log(
+      `Tool execution: avg=${avgTime.toFixed(2)}ms, max=${maxTime.toFixed(2)}ms`
+    );
   });
 
   it("should benchmark memory usage", () => {
@@ -75,7 +76,9 @@ describe("Performance Benchmarks", () => {
     // Each agent should use reasonable memory (< 10KB per agent instance)
     expect(memoryPerAgent).toBeLessThan(10 * 1024); // 10KB per agent
 
-    console.log(`Memory usage: ${(memoryDelta / 1024).toFixed(2)}KB total, ${(memoryPerAgent / 1024).toFixed(2)}KB per agent`);
+    console.log(
+      `Memory usage: ${(memoryDelta / 1024).toFixed(2)}KB total, ${(memoryPerAgent / 1024).toFixed(2)}KB per agent`
+    );
   });
 
   it("should benchmark concurrent agent operations", async () => {
@@ -96,7 +99,9 @@ describe("Performance Benchmarks", () => {
     // Concurrent operations should complete quickly
     expect(duration).toBeLessThan(100); // 100ms for 10 concurrent operations
 
-    console.log(`Concurrent operations: ${duration.toFixed(2)}ms for ${concurrent} operations`);
+    console.log(
+      `Concurrent operations: ${duration.toFixed(2)}ms for ${concurrent} operations`
+    );
   });
 
   it("should compare Bun vs Node.js performance (if available)", () => {

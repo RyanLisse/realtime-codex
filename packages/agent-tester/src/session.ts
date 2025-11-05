@@ -17,7 +17,11 @@ export function createTesterSession(name?: string): AgentSession {
     messages: [],
     metadata: {
       name: name ?? "Tester Agent",
-      capabilities: ["generateUnitTest", "generateIntegrationTest", "generateE2ETest"],
+      capabilities: [
+        "generateUnitTest",
+        "generateIntegrationTest",
+        "generateE2ETest",
+      ],
     },
     createdAt: now,
     updatedAt: now,
@@ -37,4 +41,3 @@ export function updateTesterSession(
     updatedAt: new Date(),
   };
 }
-

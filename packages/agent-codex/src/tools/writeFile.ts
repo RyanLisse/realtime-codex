@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { tool } from "ai";
 import { promises as fs } from "node:fs";
 import { dirname } from "node:path";
+import { tool } from "ai";
+import { z } from "zod";
 
 /**
  * Write file tool parameters schema
@@ -32,7 +32,8 @@ export type WriteFileResponse = z.infer<typeof WriteFileResponseSchema>;
  * Writes content to a file on the filesystem
  */
 export const writeFileTool = tool({
-  description: "Write content to a file on the filesystem. Creates directories if needed.",
+  description:
+    "Write content to a file on the filesystem. Creates directories if needed.",
   parameters: WriteFileParamsSchema,
   execute: async (params) => {
     try {
@@ -58,4 +59,3 @@ export const writeFileTool = tool({
     }
   },
 });
-

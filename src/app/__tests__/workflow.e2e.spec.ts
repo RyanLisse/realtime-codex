@@ -1,10 +1,13 @@
 /**
  * Example E2E test for workflow submission
  * This file demonstrates end-to-end testing patterns with Playwright
+ *
+ * Note: This file should only be run by Playwright, not Vitest
  */
 
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
+// Use Playwright's test.describe (not Vitest's)
 test.describe("Workflow E2E Test", () => {
   test("should open workflow page and submit task", async ({ page }) => {
     // Navigate to workflow page
@@ -18,22 +21,26 @@ test.describe("Workflow E2E Test", () => {
 
     // Example: Find and interact with workflow form
     // This is a template - adjust based on actual workflow page structure
-    const workflowForm = page.locator('form[data-testid="workflow-form"]').or(
-      page.locator('form')
-    ).first();
+    const workflowForm = page
+      .locator('form[data-testid="workflow-form"]')
+      .or(page.locator("form"))
+      .first();
 
     if (await workflowForm.isVisible()) {
       // Fill in task description
-      const taskInput = workflowForm.locator('input[type="text"], textarea').first();
+      const taskInput = workflowForm
+        .locator('input[type="text"], textarea')
+        .first();
       if (await taskInput.isVisible()) {
         await taskInput.fill("Test workflow task");
       }
 
       // Submit form
-      const submitButton = workflowForm.locator('button[type="submit"]').or(
-        workflowForm.getByRole("button", { name: /submit|start|create/i })
-      ).first();
-      
+      const submitButton = workflowForm
+        .locator('button[type="submit"]')
+        .or(workflowForm.getByRole("button", { name: /submit|start|create/i }))
+        .first();
+
       if (await submitButton.isVisible()) {
         await submitButton.click();
       }
@@ -44,12 +51,15 @@ test.describe("Workflow E2E Test", () => {
 
     // Verify artifacts or workflow completion
     // This is a template - adjust based on actual workflow UI
-    const successIndicator = page.locator('[data-testid="workflow-success"]').or(
-      page.getByText(/completed|success|done/i)
-    ).first();
+    const successIndicator = page
+      .locator('[data-testid="workflow-success"]')
+      .or(page.getByText(/completed|success|done/i))
+      .first();
 
     // Check if success indicator exists (optional assertion)
-    if (await successIndicator.isVisible({ timeout: 5000 }).catch(() => false)) {
+    if (
+      await successIndicator.isVisible({ timeout: 5000 }).catch(() => false)
+    ) {
       await expect(successIndicator).toBeVisible();
     }
   });
@@ -70,7 +80,7 @@ test.describe("Workflow E2E Test", () => {
     // Example: Intercept and mock network requests
     await page.route("**/api/**", async (route) => {
       const url = route.request().url();
-      
+
       // Mock API responses
       if (url.includes("/workflow")) {
         await route.fulfill({
@@ -87,5 +97,3 @@ test.describe("Workflow E2E Test", () => {
     await page.waitForLoadState("networkidle");
   });
 });
-
-

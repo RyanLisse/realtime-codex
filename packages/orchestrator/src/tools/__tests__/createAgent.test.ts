@@ -2,7 +2,7 @@
  * Unit tests for createAgent tool
  */
 
-import { describe, it, expect } from "bun:test";
+import { describe, expect, it } from "bun:test";
 
 // Note: bun:test types are provided by Bun runtime
 import { createAgentTool } from "../createAgent.js";
@@ -37,4 +37,3 @@ describe("createAgentTool", () => {
     expect(result.type).toBe("backend-dev");
   });
 });
-

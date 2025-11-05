@@ -2,7 +2,7 @@
  * Unit tests for listAgents tool
  */
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { listAgentsTool } from "../listAgents.js";
 
 describe("listAgentsTool", () => {
@@ -23,4 +23,3 @@ describe("listAgentsTool", () => {
     }
   });
 });
-

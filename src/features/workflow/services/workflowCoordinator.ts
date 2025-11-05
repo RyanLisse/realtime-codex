@@ -5,12 +5,12 @@ import type {
   BranchProgressMetrics,
   CreateWorkflowParams,
   HandoffRecord,
+  WorkflowCoordinator as IWorkflowCoordinator,
   ParallelExecutionMetrics,
   Task,
   TaskId,
   TaskRouter,
   Workflow,
-  WorkflowCoordinator as IWorkflowCoordinator,
   WorkflowEventBus,
   WorkflowId,
   WorkflowPersistence,
@@ -281,7 +281,8 @@ export class WorkflowCoordinator implements IWorkflowCoordinator {
     });
 
     // Check if we're in a parallel execution state
-    const hasActiveBranches = runtime.parallelBranches && runtime.parallelBranches.size > 0;
+    const hasActiveBranches =
+      runtime.parallelBranches && runtime.parallelBranches.size > 0;
 
     if (hasActiveBranches) {
       // Only process workflow if all parallel branches have converged
@@ -430,7 +431,10 @@ export class WorkflowCoordinator implements IWorkflowCoordinator {
         continue;
       }
 
-      const resolvedAgent = await this.taskRouter.routeTask(workflowId, workflowTask);
+      const resolvedAgent = await this.taskRouter.routeTask(
+        workflowId,
+        workflowTask
+      );
       workflowTask.assignedAgent = resolvedAgent;
       workflowTask.status = TaskStatus.ACTIVE;
       workflowTask.startedAt = now;
@@ -568,15 +572,11 @@ export class WorkflowCoordinator implements IWorkflowCoordinator {
 
     const branches = Array.from(runtime.parallelBranches.values());
     const totalBranches = branches.length;
-    const activeBranches = branches.filter(
-      (b) => b.status === "active"
-    ).length;
+    const activeBranches = branches.filter((b) => b.status === "active").length;
     const completedBranches = branches.filter(
       (b) => b.status === "completed"
     ).length;
-    const failedBranches = branches.filter(
-      (b) => b.status === "failed"
-    ).length;
+    const failedBranches = branches.filter((b) => b.status === "failed").length;
 
     const overallProgress =
       totalBranches > 0
@@ -586,7 +586,11 @@ export class WorkflowCoordinator implements IWorkflowCoordinator {
     // Identify bottlenecks (branches taking longer than average)
     const completedDurations: number[] = [];
     for (const branch of branches) {
-      if (branch.status === "completed" && branch.startedAt && branch.completedAt) {
+      if (
+        branch.status === "completed" &&
+        branch.startedAt &&
+        branch.completedAt
+      ) {
         completedDurations.push(
           branch.completedAt.getTime() - branch.startedAt.getTime()
         );
@@ -613,9 +617,8 @@ export class WorkflowCoordinator implements IWorkflowCoordinator {
       }
     }
 
-    const bottlenecks = bottleneckAgents.size > 0
-      ? Array.from(bottleneckAgents)
-      : undefined;
+    const bottlenecks =
+      bottleneckAgents.size > 0 ? Array.from(bottleneckAgents) : undefined;
 
     const metrics: ParallelExecutionMetrics = {
       workflowId,

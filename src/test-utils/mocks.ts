@@ -23,7 +23,8 @@ export function createFetchMock(
     return Promise.resolve({
       ok: response.status >= 200 && response.status < 300,
       status: response.status,
-      statusText: response.status >= 200 && response.status < 300 ? "OK" : "Error",
+      statusText:
+        response.status >= 200 && response.status < 300 ? "OK" : "Error",
       json: () => Promise.resolve(response.body),
       text: () => Promise.resolve(JSON.stringify(response.body)),
       headers: new Headers({ "Content-Type": "application/json" }),
@@ -104,5 +105,3 @@ export const mockPaths = {
   artifacts: "/tmp/test-artifacts",
   logs: "/tmp/test-logs",
 };
-
-

@@ -228,7 +228,10 @@ export function expectScreenReaderCompatible(element: HTMLElement): void {
   const textContent = element.textContent?.trim();
 
   // Element must be accessible to screen readers
-  if (element.hasAttribute("aria-hidden") && element.getAttribute("aria-hidden") === "true") {
+  if (
+    element.hasAttribute("aria-hidden") &&
+    element.getAttribute("aria-hidden") === "true"
+  ) {
     return; // Hidden elements don't need labels
   }
 
@@ -257,18 +260,18 @@ export function getFocusableElements(
   container: HTMLElement = document.body
 ): HTMLElement[] {
   const focusableSelectors = [
-    'a[href]',
-    'button:not([disabled])',
-    'input:not([disabled])',
-    'select:not([disabled])',
-    'textarea:not([disabled])',
+    "a[href]",
+    "button:not([disabled])",
+    "input:not([disabled])",
+    "select:not([disabled])",
+    "textarea:not([disabled])",
     '[tabindex]:not([tabindex="-1"])',
-  ].join(', ');
+  ].join(", ");
 
   return Array.from(container.querySelectorAll<HTMLElement>(focusableSelectors))
     .filter((el) => {
       const style = window.getComputedStyle(el);
-      return style.display !== 'none' && style.visibility !== 'hidden';
+      return style.display !== "none" && style.visibility !== "hidden";
     })
     .sort((a, b) => {
       const aIndex = a.tabIndex || 0;
@@ -276,4 +279,3 @@ export function getFocusableElements(
       return aIndex - bIndex;
     });
 }
-

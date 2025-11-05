@@ -2,13 +2,13 @@
  * Unit tests for Codex agent session management
  */
 
-import { describe, it, expect } from "bun:test";
+import { describe, expect, it } from "bun:test";
 
 // Note: bun:test types are provided by Bun runtime
 import {
+  addMessageToSession,
   createCodexSession,
   updateCodexSession,
-  addMessageToSession,
 } from "../session.js";
 
 describe("Codex Session Management", () => {
@@ -35,4 +35,3 @@ describe("Codex Session Management", () => {
     expect(updated.messages[0]?.content).toBe("Hello");
   });
 });
-

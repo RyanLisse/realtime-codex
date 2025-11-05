@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { tool } from "ai";
 import { promises as fs } from "node:fs";
+import { tool } from "ai";
+import { z } from "zod";
 
 /**
  * Read file tool parameters schema
@@ -48,4 +48,3 @@ export const readFileTool = tool({
     }
   },
 });
-

@@ -3,7 +3,7 @@
  * Per migration-contract.md requirements
  */
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 describe("Migration Contract Tests", () => {
   it("should maintain functional parity with Python implementation", () => {
@@ -27,4 +27,3 @@ describe("Migration Contract Tests", () => {
     expect(true).toBe(true); // Placeholder
   });
 });
-

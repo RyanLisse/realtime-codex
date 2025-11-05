@@ -1,5 +1,5 @@
-import { z } from "zod";
 import { tool } from "ai";
+import { z } from "zod";
 
 /**
  * Click tool parameters schema
@@ -42,4 +42,3 @@ export const clickTool = tool({
     } satisfies ClickResponse;
   },
 });
-

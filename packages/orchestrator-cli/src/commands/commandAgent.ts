@@ -9,7 +9,9 @@ export async function handleCommandAgent(
   orchestrator: AgentOrchestrator
 ): Promise<void> {
   if (args.length < 2) {
-    console.error("Usage: orchestrator command <agentId> <command> [parameters]");
+    console.error(
+      "Usage: orchestrator command <agentId> <command> [parameters]"
+    );
     process.exit(1);
   }
 
@@ -32,4 +34,3 @@ export async function handleCommandAgent(
   console.log(`Command executed: ${command}`);
   console.log(`Result: ${result}`);
 }
-

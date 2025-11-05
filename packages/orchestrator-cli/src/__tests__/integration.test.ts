@@ -2,7 +2,7 @@
  * Integration test for orchestrator → agent coordination
  */
 
-import { describe, it, expect, beforeEach } from "bun:test";
+import { beforeEach, describe, expect, it } from "bun:test";
 import { AgentOrchestrator } from "@repo/orchestrator";
 
 describe("Orchestrator Integration", () => {
@@ -41,4 +41,3 @@ describe("Orchestrator Integration", () => {
     expect(typeof result).toBe("string");
   });
 });
-

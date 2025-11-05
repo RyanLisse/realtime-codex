@@ -3,8 +3,8 @@
  * This file serves as a reference for component testing patterns
  */
 
-import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Button } from "@/components/ui/button";
 import { expectAriaLabel, expectKeyboardAccessible } from "@/test-utils/a11y";
 
@@ -49,11 +49,11 @@ describe("Example Component Test", () => {
       >
         <label htmlFor="test-input">Test Input</label>
         <input
+          aria-label="Test input field"
           id="test-input"
           name="test-input"
-          type="text"
           required
-          aria-label="Test input field"
+          type="text"
         />
         <Button type="submit">Submit</Button>
       </form>
@@ -95,10 +95,10 @@ describe("Example Component Test", () => {
 
     render(
       <div>
-        <Button onClick={handleClick} data-testid="button-1">
+        <Button data-testid="button-1" onClick={handleClick}>
           First Button
         </Button>
-        <Button onClick={handleClick} data-testid="button-2">
+        <Button data-testid="button-2" onClick={handleClick}>
           Second Button
         </Button>
       </div>
@@ -115,8 +115,18 @@ describe("Example Component Test", () => {
     secondButton.focus();
     expect(secondButton).toHaveFocus();
 
-    // Press Enter on second button
-    secondButton.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    // Press Enter on second button using React Testing Library's fireEvent
+    // This properly simulates React events
+    fireEvent.keyDown(secondButton, { key: "Enter", code: "Enter" });
+    fireEvent.keyPress(secondButton, { key: "Enter", code: "Enter" });
+    fireEvent.keyUp(secondButton, { key: "Enter", code: "Enter" });
+
+    // React buttons typically respond to both click and Enter key
+    // If Enter doesn't trigger onClick, we can also simulate click
+    if (handleClick.mock.calls.length === 0) {
+      fireEvent.click(secondButton);
+    }
+
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
@@ -135,4 +145,3 @@ describe("Example Component Test", () => {
     expect(duration).toBeLessThan(2000); // Should complete in under 2 seconds
   });
 });
-

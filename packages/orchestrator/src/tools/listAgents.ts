@@ -27,15 +27,19 @@ export type ListAgentsParams = z.infer<typeof ListAgentsParamsSchema>;
  * List agents tool response schema
  */
 const ListAgentsResponseSchema = z.object({
-  agents: z.array(
-    z.object({
-      id: z.string(),
-      type: z.string(),
-      status: z.string(),
-      createdAt: z.coerce.date(),
-    })
-  ),
-  count: z.number(),
+  success: z.boolean(),
+  agents: z
+    .array(
+      z.object({
+        id: z.string(),
+        type: z.string(),
+        status: z.string(),
+        name: z.string().optional(),
+        createdAt: z.coerce.date(),
+      })
+    )
+    .optional(),
+  count: z.number().optional(),
 });
 
 export type ListAgentsResponse = z.infer<typeof ListAgentsResponseSchema>;
@@ -51,6 +55,7 @@ export const listAgentsTool = tool({
     // This will be implemented by AgentManager
     // For now, return empty list as placeholder
     return {
+      success: true,
       agents: [],
       count: 0,
     } satisfies ListAgentsResponse;

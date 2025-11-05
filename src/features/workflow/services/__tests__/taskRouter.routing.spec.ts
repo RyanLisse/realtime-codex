@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { AgentType, TaskStatus, type Task } from "../../types/workflow.types";
+import { AgentType, type Task, TaskStatus } from "../../types/workflow.types";
 import { TaskRouter } from "../taskRouter";
 
 describe("TaskRouter - Routing Heuristics", () => {
@@ -18,7 +18,7 @@ describe("TaskRouter - Routing Heuristics", () => {
       status: TaskStatus.PENDING,
       dependencies: [],
       createdAt: new Date(),
-      timeoutMs: 300000,
+      timeoutMs: 300_000,
     };
 
     const agent = await router.routeTask(workflowId, bugfixTask);
@@ -35,7 +35,7 @@ describe("TaskRouter - Routing Heuristics", () => {
       status: TaskStatus.PENDING,
       dependencies: [],
       createdAt: new Date(),
-      timeoutMs: 300000,
+      timeoutMs: 300_000,
     };
 
     const agent = await router.routeTask(workflowId, complexTask);
@@ -52,7 +52,7 @@ describe("TaskRouter - Routing Heuristics", () => {
       status: TaskStatus.PENDING,
       dependencies: [],
       createdAt: new Date(),
-      timeoutMs: 300000,
+      timeoutMs: 300_000,
     };
 
     const agent = await router.routeTask(workflowId, backendTask);
@@ -69,7 +69,7 @@ describe("TaskRouter - Routing Heuristics", () => {
       status: TaskStatus.PENDING,
       dependencies: [],
       createdAt: new Date(),
-      timeoutMs: 300000,
+      timeoutMs: 300_000,
     };
 
     const agent = await router.routeTask(workflowId, frontendTask);
@@ -86,7 +86,7 @@ describe("TaskRouter - Routing Heuristics", () => {
       status: TaskStatus.PENDING,
       dependencies: [],
       createdAt: new Date(),
-      timeoutMs: 300000,
+      timeoutMs: 300_000,
     };
 
     const agent = await router.routeTask(workflowId, designTask);
@@ -97,12 +97,13 @@ describe("TaskRouter - Routing Heuristics", () => {
     const workflowId = "test-workflow-6";
     const multiKeywordTask: Task = {
       id: "task-6",
-      description: "Design and implement frontend dashboard with API integration",
+      description:
+        "Design and implement frontend dashboard with API integration",
       assignedAgent: AgentType.PROJECT_MANAGER,
       status: TaskStatus.PENDING,
       dependencies: [],
       createdAt: new Date(),
-      timeoutMs: 300000,
+      timeoutMs: 300_000,
     };
 
     const agent = await router.routeTask(workflowId, multiKeywordTask);
@@ -118,7 +119,7 @@ describe("TaskRouter - Routing Heuristics", () => {
       status: TaskStatus.PENDING,
       dependencies: [],
       createdAt: new Date(),
-      timeoutMs: 300000,
+      timeoutMs: 300_000,
     };
 
     const agent = await router.routeTask(workflowId, ambiguousTask);
@@ -134,7 +135,7 @@ describe("TaskRouter - Routing Heuristics", () => {
       status: TaskStatus.PENDING,
       dependencies: [],
       createdAt: new Date(),
-      timeoutMs: 300000,
+      timeoutMs: 300_000,
     };
 
     const agent = await router.routeTask(workflowId, frontendTask);
@@ -150,7 +151,7 @@ describe("TaskRouter - Routing Heuristics", () => {
       status: TaskStatus.PENDING,
       dependencies: [],
       createdAt: new Date(),
-      timeoutMs: 300000,
+      timeoutMs: 300_000,
     };
 
     const agent = await router.routeTask(workflowId, testTask);
@@ -166,7 +167,7 @@ describe("TaskRouter - Routing Heuristics", () => {
       status: TaskStatus.PENDING,
       dependencies: [],
       createdAt: new Date(),
-      timeoutMs: 300000,
+      timeoutMs: 300_000,
     };
 
     const agent = await router.routeTask(workflowId, apiTask);
@@ -182,7 +183,7 @@ describe("TaskRouter - Routing Heuristics", () => {
       status: TaskStatus.PENDING,
       dependencies: [],
       createdAt: new Date(),
-      timeoutMs: 300000,
+      timeoutMs: 300_000,
     };
 
     const agent = await router.routeTask(workflowId, upperCaseTask);
@@ -198,11 +199,10 @@ describe("TaskRouter - Routing Heuristics", () => {
       status: TaskStatus.PENDING,
       dependencies: [],
       createdAt: new Date(),
-      timeoutMs: 300000,
+      timeoutMs: 300_000,
     };
 
     const agent = await router.routeTask(workflowId, mixedCaseTask);
     expect([AgentType.FRONTEND, AgentType.DESIGNER]).toContain(agent);
   });
 });
-

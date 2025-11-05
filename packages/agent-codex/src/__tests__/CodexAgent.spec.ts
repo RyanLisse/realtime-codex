@@ -2,7 +2,7 @@
  * Unit tests for CodexAgent
  */
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { CodexAgent } from "../CodexAgent.js";
 
 describe("CodexAgent", () => {
@@ -22,4 +22,3 @@ describe("CodexAgent", () => {
     expect(agent).toBeDefined();
   });
 });
-

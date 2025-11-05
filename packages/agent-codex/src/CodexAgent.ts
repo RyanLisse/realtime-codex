@@ -3,12 +3,12 @@
  * Uses GPT-5 Codex model for code generation tasks
  */
 
-import { Experimental_Agent as Agent } from "ai";
 import { openai } from "@ai-sdk/openai";
+import type { AgentSession } from "@repo/shared";
+import { Experimental_Agent as Agent } from "ai";
+import { createCodexSession, updateCodexSession } from "./session.js";
 import { readFileTool } from "./tools/readFile.js";
 import { writeFileTool } from "./tools/writeFile.js";
-import type { AgentSession } from "@repo/shared";
-import { createCodexSession, updateCodexSession } from "./session.js";
 
 /**
  * CodexAgent configuration
@@ -109,4 +109,3 @@ export class CodexAgent {
     this.session = updateCodexSession(this.session, { status });
   }
 }
-
