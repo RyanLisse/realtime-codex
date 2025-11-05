@@ -1,5 +1,7 @@
 # CLAUDE.md - Behavioral Directives
 
+@AGENTS.md
+
 ## Memory First
 ALWAYS before making decisions or after discovering anything:
 ```
