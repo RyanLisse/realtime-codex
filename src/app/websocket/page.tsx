@@ -16,17 +16,7 @@ import { WavRecorder, WavStreamPlayer } from "wavtools";
 import { z } from "zod";
 import { App } from "@/components/app";
 import { CameraCapture } from "@/components/camera-capture";
-import { handleRefundRequest } from "../server/backend-agent.action";
 import { getToken } from "../server/token.action";
-
-const _refundBackchannel = tool({
-  name: "refundBackchannel",
-  description: "Evaluate a refund",
-  parameters: z.object({
-    request: z.string(),
-  }),
-  execute: async ({ request }) => handleRefundRequest(request),
-});
 
 const guardrails: RealtimeOutputGuardrail[] = [
   {

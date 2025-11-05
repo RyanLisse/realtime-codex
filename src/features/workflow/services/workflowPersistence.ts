@@ -1,12 +1,39 @@
 import { promises as fs } from "fs";
 import * as path from "path";
-import {
-  type Workflow,
-  type WorkflowId,
-  type WorkflowPersistence,
-  WorkflowSchema,
-  type WorkflowStatus,
+import { WorkflowSchema } from "../types/workflow.schema";
+import type {
+  HandoffRecord,
+  Task,
+  Workflow,
+  WorkflowId,
+  WorkflowPersistence,
+  WorkflowStatus,
 } from "../types/workflow.types";
+
+type SerializableTask = Omit<
+  Task,
+  "createdAt" | "startedAt" | "completedAt"
+> & {
+  createdAt: string;
+  startedAt?: string;
+  completedAt?: string;
+};
+
+type SerializableHandoffRecord = Omit<HandoffRecord, "timestamp"> & {
+  timestamp: string;
+};
+
+interface SerializableWorkflow
+  extends Omit<
+    Workflow,
+    "createdAt" | "updatedAt" | "taskQueue" | "completedTasks" | "history"
+  > {
+  createdAt: string;
+  updatedAt: string;
+  taskQueue: SerializableTask[];
+  completedTasks: SerializableTask[];
+  history: SerializableHandoffRecord[];
+}
 
 export class FileWorkflowPersistence implements WorkflowPersistence {
   private readonly workflowsDir: string;
@@ -16,33 +43,70 @@ export class FileWorkflowPersistence implements WorkflowPersistence {
   }
 
   async saveWorkflow(workflow: Workflow): Promise<void> {
-    // TODO: Implement atomic file writing with backup
-    // TODO: Serialize dates properly
-    // TODO: Handle concurrent access
-    throw new Error("FileWorkflowPersistence.saveWorkflow not implemented");
+    await this.ensureWorkflowsDirectory();
+
+    // Validate workflow prior to serialization to catch issues early
+    WorkflowSchema.parse(workflow);
+
+    const filePath = this.getWorkflowFilePath(workflow.id);
+    const tempPath = `${filePath}.tmp`;
+    const data = this.serializeWorkflow(workflow);
+
+    await fs.writeFile(tempPath, data, "utf-8");
+    await fs.rename(tempPath, filePath);
   }
 
   async loadWorkflow(id: WorkflowId): Promise<Workflow | null> {
-    // TODO: Implement workflow loading from JSON file
-    // TODO: Deserialize dates from ISO strings
-    // TODO: Validate loaded data with Zod schema
-    // TODO: Handle file not found gracefully
-    throw new Error("FileWorkflowPersistence.loadWorkflow not implemented");
+    try {
+      await this.ensureWorkflowsDirectory();
+      const filePath = this.getWorkflowFilePath(id);
+      const data = await fs.readFile(filePath, "utf-8");
+      return this.deserializeWorkflow(data);
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+        return null;
+      }
+      throw error;
+    }
   }
 
   async listWorkflows(status?: WorkflowStatus): Promise<Workflow[]> {
-    // TODO: Scan workflows directory for JSON files
-    // TODO: Filter by status if provided
-    // TODO: Load and validate each workflow
-    // TODO: Return sorted by creation date
-    throw new Error("FileWorkflowPersistence.listWorkflows not implemented");
+    await this.ensureWorkflowsDirectory();
+    const entries = await fs.readdir(this.workflowsDir);
+
+    const workflows: Workflow[] = [];
+    for (const entry of entries) {
+      if (!entry.endsWith(".json")) {
+        continue;
+      }
+
+      const workflow = await this.loadWorkflow(entry.replace(/\.json$/, ""));
+      if (!workflow) {
+        continue;
+      }
+
+      if (status && workflow.status !== status) {
+        continue;
+      }
+
+      workflows.push(workflow);
+    }
+
+    return workflows.sort(
+      (a, b) => a.createdAt.getTime() - b.createdAt.getTime()
+    );
   }
 
   async deleteWorkflow(id: WorkflowId): Promise<void> {
-    // TODO: Delete workflow JSON file
-    // TODO: Handle file not found gracefully
-    // TODO: Consider backup/archive instead of deletion
-    throw new Error("FileWorkflowPersistence.deleteWorkflow not implemented");
+    try {
+      const filePath = this.getWorkflowFilePath(id);
+      await fs.unlink(filePath);
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+        return;
+      }
+      throw error;
+    }
   }
 
   // Helper methods for file operations
@@ -59,13 +123,58 @@ export class FileWorkflowPersistence implements WorkflowPersistence {
   }
 
   private serializeWorkflow(workflow: Workflow): string {
-    // TODO: Implement proper serialization with date handling
-    return JSON.stringify(workflow, null, 2);
+    const serializable: SerializableWorkflow = {
+      ...workflow,
+      createdAt: workflow.createdAt.toISOString(),
+      updatedAt: workflow.updatedAt.toISOString(),
+      taskQueue: workflow.taskQueue.map((task) => this.serializeTask(task)),
+      completedTasks: workflow.completedTasks.map((task) =>
+        this.serializeTask(task)
+      ),
+      history: workflow.history.map((record) => ({
+        ...record,
+        timestamp: record.timestamp.toISOString(),
+      })),
+    };
+
+    return JSON.stringify(serializable, null, 2);
   }
 
   private deserializeWorkflow(json: string): Workflow {
-    // TODO: Implement proper deserialization with date parsing and validation
-    const data = JSON.parse(json);
-    return WorkflowSchema.parse(data);
+    const data = JSON.parse(json) as SerializableWorkflow;
+
+    const workflow: Workflow = {
+      ...data,
+      createdAt: new Date(data.createdAt),
+      updatedAt: new Date(data.updatedAt),
+      taskQueue: data.taskQueue.map((task) => this.deserializeTask(task)),
+      completedTasks: data.completedTasks.map((task) =>
+        this.deserializeTask(task)
+      ),
+      history: data.history.map((record) => ({
+        ...record,
+        timestamp: new Date(record.timestamp),
+      })),
+    };
+
+    return WorkflowSchema.parse(workflow);
+  }
+
+  private serializeTask(task: Task): SerializableTask {
+    return {
+      ...task,
+      createdAt: task.createdAt.toISOString(),
+      startedAt: task.startedAt?.toISOString(),
+      completedAt: task.completedAt?.toISOString(),
+    };
+  }
+
+  private deserializeTask(task: SerializableTask): Task {
+    return {
+      ...task,
+      createdAt: new Date(task.createdAt),
+      startedAt: task.startedAt ? new Date(task.startedAt) : undefined,
+      completedAt: task.completedAt ? new Date(task.completedAt) : undefined,
+    };
   }
 }

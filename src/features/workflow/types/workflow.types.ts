@@ -37,7 +37,7 @@ export type TaskId = string;
 export type ArtifactId = string;
 
 // Workflow entity
-export interface Workflow {
+export type Workflow = {
   id: WorkflowId;
   description: string;
   status: WorkflowStatus;
@@ -48,10 +48,10 @@ export interface Workflow {
   completedTasks: Task[];
   artifacts: ArtifactId[];
   history: HandoffRecord[];
-}
+};
 
 // Task entity
-export interface Task {
+export type Task = {
   id: TaskId;
   description: string;
   assignedAgent: AgentType;
@@ -62,10 +62,10 @@ export interface Task {
   startedAt?: Date;
   completedAt?: Date;
   timeoutMs: number;
-}
+};
 
 // Handoff record for agent transitions
-export interface HandoffRecord {
+export type HandoffRecord = {
   id: string;
   workflowId: WorkflowId;
   fromAgent: AgentType;
@@ -74,23 +74,23 @@ export interface HandoffRecord {
   artifacts: ArtifactId[];
   timestamp: Date;
   success: boolean;
-}
+};
 
 // Agent status tracking
-export interface AgentStatus {
+export type AgentStatus = {
   agentType: AgentType;
   status: AgentExecutionStatus;
   currentTask: TaskId | null;
   progress: number; // 0-100
   lastActivity: Date;
   errorMessage?: string;
-}
+};
 
 // Workflow creation parameters
-export interface CreateWorkflowParams {
+export type CreateWorkflowParams = {
   description: string;
   requirements?: string[];
-}
+};
 
 // Workflow event types
 export type WorkflowEventType =
@@ -102,40 +102,71 @@ export type WorkflowEventType =
   | "paused"
   | "resumed"
   | "completed"
-  | "failed";
+  | "failed"
+  | "parallel_execution_update"
+  | "branch_progress";
 
-export interface WorkflowEvent {
+export type WorkflowEvent = {
   type: WorkflowEventType;
   workflowId: WorkflowId;
   timestamp: Date;
-  data?: Record<string, unknown>;
-}
+  data?:
+    | BranchProgressMetrics
+    | ParallelExecutionMetrics
+    | Record<string, unknown>;
+};
 
 // Service interfaces
-export interface WorkflowCoordinator {
+export type WorkflowCoordinator = {
   createWorkflow(params: CreateWorkflowParams): Promise<WorkflowId>;
   getWorkflow(id: WorkflowId): Promise<Workflow | null>;
   pauseWorkflow(id: WorkflowId): Promise<void>;
   resumeWorkflow(id: WorkflowId): Promise<void>;
   cancelWorkflow(id: WorkflowId): Promise<void>;
-}
+};
 
-export interface TaskRouter {
+export type TaskRouter = {
   routeTask(workflowId: WorkflowId, task: Task): Promise<AgentType>;
   getNextTasks(workflowId: WorkflowId): Promise<Task[]>;
-}
+  syncWorkflowTasks(workflowId: WorkflowId, tasks: Task[]): void;
+  removeWorkflow(workflowId: WorkflowId): void;
+};
 
-export interface WorkflowPersistence {
+export type WorkflowPersistence = {
   saveWorkflow(workflow: Workflow): Promise<void>;
   loadWorkflow(id: WorkflowId): Promise<Workflow | null>;
   listWorkflows(status?: WorkflowStatus): Promise<Workflow[]>;
   deleteWorkflow(id: WorkflowId): Promise<void>;
-}
+};
 
-export interface WorkflowEventBus {
+export type WorkflowEventBus = {
   emit(event: WorkflowEvent): void;
   subscribe(
     workflowId: WorkflowId,
     handler: (event: WorkflowEvent) => void
   ): () => void;
-}
+};
+
+// Parallel execution metrics
+export type BranchProgressMetrics = {
+  workflowId: WorkflowId;
+  branchId: string;
+  agentType: AgentType;
+  taskId: TaskId;
+  progress: number;
+  status: "pending" | "active" | "completed" | "failed";
+  estimatedTimeRemaining?: number;
+  startedAt?: Date;
+  completedAt?: Date;
+};
+
+export type ParallelExecutionMetrics = {
+  workflowId: WorkflowId;
+  totalBranches: number;
+  activeBranches: number;
+  completedBranches: number;
+  failedBranches: number;
+  overallProgress: number;
+  estimatedTimeRemaining?: number;
+  bottlenecks?: AgentType[];
+};

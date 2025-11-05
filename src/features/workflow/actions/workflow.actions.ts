@@ -52,18 +52,25 @@ export async function getWorkflow(workflowId: WorkflowId) {
   return coord.getWorkflow(workflowId);
 }
 
-export async function completeTask(workflowId: WorkflowId, taskId: string, result: unknown): Promise<void> {
+export async function completeTask(
+  workflowId: WorkflowId,
+  taskId: string,
+  result: unknown
+): Promise<void> {
   const coord = getCoordinator();
   return coord.completeTask(workflowId, taskId, result);
 }
 
-export async function failTask(workflowId: WorkflowId, taskId: string, error: Error): Promise<void> {
+export async function failTask(
+  workflowId: WorkflowId,
+  taskId: string,
+  error: Error
+): Promise<void> {
   const coord = getCoordinator();
   return coord.failTask(workflowId, taskId, error);
 }
 
 export async function startWorkflow(workflowId: WorkflowId): Promise<void> {
-  // Trigger initial workflow processing after creation
-  const coord = getCoordinator() as any; // Access private method for demo
-  await coord.processWorkflow(workflowId);
+  const coord = getCoordinator();
+  await coord.resumeWorkflow(workflowId);
 }

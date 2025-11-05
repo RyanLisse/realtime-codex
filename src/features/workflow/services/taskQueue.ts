@@ -1,4 +1,4 @@
-import { Task, TaskId } from '../types/workflow.types';
+import { type Task, type TaskId, TaskStatus } from "../types/workflow.types";
 
 export interface TaskQueueItem {
   task: Task;
@@ -17,15 +17,17 @@ export class TaskQueue {
   /**
    * Add a task to the queue
    */
-  enqueue(task: Task, priority: number = 0): void {
+  enqueue(task: Task, priority = 0): void {
     const queueItem: TaskQueueItem = {
       task,
       priority,
-      enqueuedAt: new Date()
+      enqueuedAt: new Date(),
     };
 
     // Insert in priority order (lower priority number = higher priority)
-    const insertIndex = this.queue.findIndex(item => item.priority > priority);
+    const insertIndex = this.queue.findIndex(
+      (item) => item.priority > priority
+    );
     if (insertIndex === -1) {
       this.queue.push(queueItem);
     } else {
@@ -41,7 +43,10 @@ export class TaskQueue {
     // Find the first task whose dependencies are all satisfied
     for (let i = 0; i < this.queue.length; i++) {
       const item = this.queue[i];
-      if (this.areDependenciesSatisfied(item.task)) {
+      if (
+        item.task.status === TaskStatus.PENDING &&
+        this.areDependenciesSatisfied(item.task)
+      ) {
         this.queue.splice(i, 1);
         return item.task;
       }
@@ -55,7 +60,10 @@ export class TaskQueue {
    */
   peek(): Task | null {
     for (const item of this.queue) {
-      if (this.areDependenciesSatisfied(item.task)) {
+      if (
+        item.task.status === TaskStatus.PENDING &&
+        this.areDependenciesSatisfied(item.task)
+      ) {
         return item.task;
       }
     }
@@ -67,15 +75,19 @@ export class TaskQueue {
    */
   getReadyTasks(): Task[] {
     return this.queue
-      .filter(item => this.areDependenciesSatisfied(item.task))
-      .map(item => item.task);
+      .filter(
+        (item) =>
+          item.task.status === TaskStatus.PENDING &&
+          this.areDependenciesSatisfied(item.task)
+      )
+      .map((item) => item.task);
   }
 
   /**
    * Get all tasks in the queue (including those with unsatisfied dependencies)
    */
   getAllTasks(): Task[] {
-    return this.queue.map(item => item.task);
+    return this.queue.map((item) => item.task);
   }
 
   /**
@@ -88,8 +100,38 @@ export class TaskQueue {
   /**
    * Get the number of tasks in the queue
    */
-  size(): boolean {
+  size(): number {
     return this.queue.length;
+  }
+
+  /**
+   * Remove and return all tasks that are ready for execution.
+   * Useful when scheduling parallel branches.
+   */
+  dequeueReadyTasks(limit?: number): Task[] {
+    const ready: Task[] = [];
+    let collected = 0;
+
+    for (let i = 0; i < this.queue.length; i++) {
+      const item = this.queue[i];
+      if (
+        item.task.status !== TaskStatus.PENDING ||
+        !this.areDependenciesSatisfied(item.task)
+      ) {
+        continue;
+      }
+
+      ready.push(item.task);
+      this.queue.splice(i, 1);
+      i -= 1; // Adjust index after removal
+
+      collected += 1;
+      if (limit !== undefined && collected >= limit) {
+        break;
+      }
+    }
+
+    return ready;
   }
 
   /**
@@ -110,14 +152,14 @@ export class TaskQueue {
    * Check if a task's dependencies are satisfied
    */
   private areDependenciesSatisfied(task: Task): boolean {
-    return task.dependencies.every(depId => this.completedTasks.has(depId));
+    return task.dependencies.every((depId) => this.completedTasks.has(depId));
   }
 
   /**
    * Remove a specific task from the queue (useful for cancellation)
    */
   removeTask(taskId: TaskId): boolean {
-    const index = this.queue.findIndex(item => item.task.id === taskId);
+    const index = this.queue.findIndex((item) => item.task.id === taskId);
     if (index !== -1) {
       this.queue.splice(index, 1);
       return true;

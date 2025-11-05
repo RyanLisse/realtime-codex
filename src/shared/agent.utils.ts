@@ -1,5 +1,9 @@
 import { Agent, tool } from "@openai/agents";
 import { z } from "zod";
+import { WorkflowCoordinator } from "@/features/workflow/services/workflowCoordinator";
+import { FileWorkflowPersistence } from "@/features/workflow/services/workflowPersistence";
+import { WorkflowEventBus } from "@/features/workflow/services/workflowEventBus";
+import { TaskRouter } from "@/features/workflow/services/taskRouter";
 
 type AgentConfig = {
   name: string;
@@ -36,20 +40,44 @@ export function createToolWrapper<T, R = unknown>(
 }
 
 // Workflow feature entry points
+
 export type WorkflowServiceFactory = () => {
   createWorkflow: (task: string) => Promise<string>;
   getWorkflowStatus: (id: string) => Promise<unknown>;
 };
 
 export function createWorkflowServiceFactory(): WorkflowServiceFactory {
+  const persistence = new FileWorkflowPersistence("./workflows");
+  const eventBus = new WorkflowEventBus();
+  const taskRouter = new TaskRouter();
+  
+  const coordinator = new WorkflowCoordinator({
+    persistence,
+    eventBus,
+    taskRouter,
+  });
+
   return {
     createWorkflow: async (task: string) => {
-      // TODO: Implement workflow creation via WorkflowCoordinator
-      throw new Error("Workflow service not yet implemented");
+      const workflowId = await coordinator.createWorkflow({
+        description: task,
+        requirements: [],
+      });
+      return workflowId;
     },
-    getWorkflowStatus: async (_id: string) => {
-      // TODO: Implement workflow status retrieval
-      throw new Error("Workflow status retrieval not yet implemented");
+    getWorkflowStatus: async (id: string) => {
+      const workflow = await coordinator.getWorkflow(id);
+      return workflow
+        ? {
+            id: workflow.id,
+            status: workflow.status,
+            currentAgent: workflow.currentAgent,
+            progress:
+              workflow.completedTasks.length /
+              (workflow.taskQueue.length + workflow.completedTasks.length),
+            artifacts: workflow.artifacts,
+          }
+        : null;
     },
   };
 }

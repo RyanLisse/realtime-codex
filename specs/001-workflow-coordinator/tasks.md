@@ -61,12 +61,12 @@
 
 ### Implementation for User Story 2
 
-- [ ] T016 [P] [US2] Add parallel orchestration tests in src/features/workflow/services/__tests__/workflowCoordinator.parallel.spec.ts
-- [ ] T017 [P] [US2] Build dependency graph utility in src/features/workflow/services/dependencyGraph.ts
-- [ ] T018 [US2] Implement concurrent scheduling in src/features/workflow/services/taskRouter.ts
-- [ ] T019 [US2] Extend coordinator to manage parallel branches in src/features/workflow/services/workflowCoordinator.ts
-- [ ] T020 [US2] Emit branch progress metrics in src/features/workflow/services/workflowEventBus.ts
-- [ ] T021 [US2] Render parallel status updates in src/features/workflow/hooks/useWorkflow.ts
+- [x] T016 [P] [US2] Add parallel orchestration tests in src/features/workflow/services/__tests__/workflowCoordinator.parallel.spec.ts
+- [x] T017 [P] [US2] Build dependency graph utility in src/features/workflow/services/dependencyGraph.ts
+- [x] T018 [US2] Implement concurrent scheduling in src/features/workflow/services/taskRouter.ts
+- [x] T019 [US2] Extend coordinator to manage parallel branches in src/features/workflow/services/workflowCoordinator.ts
+- [x] T020 [US2] Emit branch progress metrics in src/features/workflow/services/workflowEventBus.ts
+- [x] T021 [US2] Render parallel status updates in src/features/workflow/hooks/useWorkflow.ts
 
 **Checkpoint**: User Stories 1 & 2 operate independently with sequential + parallel coverage.
 
@@ -80,12 +80,12 @@
 
 ### Implementation for User Story 3
 
-- [ ] T022 [P] [US3] Add persistence recovery test in src/features/workflow/services/__tests__/workflowPersistence.recovery.spec.ts
-- [ ] T023 [US3] Persist checkpoints and history snapshots in src/features/workflow/services/workflowPersistence.ts
-- [ ] T024 [US3] Implement resume/rollback logic in src/features/workflow/services/workflowCoordinator.ts
-- [ ] T025 [P] [US3] Extend server actions for pause/resume endpoints in src/features/workflow/actions/workflow.actions.ts
-- [ ] T026 [US3] Update recovery states in docs/WORKFLOW_STATE_MACHINE.md
-- [ ] T027 [US3] Support resume controls within src/features/workflow/hooks/useWorkflow.ts
+- [x] T022 [P] [US3] Add persistence recovery test in src/features/workflow/services/__tests__/workflowPersistence.recovery.spec.ts
+- [x] T023 [US3] Persist checkpoints and history snapshots in src/features/workflow/services/workflowPersistence.ts
+- [x] T024 [US3] Implement resume/rollback logic in src/features/workflow/services/workflowCoordinator.ts
+- [x] T025 [P] [US3] Extend server actions for pause/resume endpoints in src/features/workflow/actions/workflow.actions.ts
+- [x] T026 [US3] Update recovery states in docs/WORKFLOW_STATE_MACHINE.md
+- [x] T027 [US3] Support resume controls within src/features/workflow/hooks/useWorkflow.ts
 
 **Checkpoint**: Workflow resumes reliably; recovery validated independently.
 
@@ -99,11 +99,11 @@
 
 ### Implementation for User Story 4
 
-- [ ] T028 [P] [US4] Write routing heuristics tests in src/features/workflow/services/__tests__/taskRouter.routing.spec.ts
-- [ ] T029 [US4] Implement capability-based routing rules in src/features/workflow/services/taskRouter.ts
-- [ ] T030 [US4] Define agent capability matrix in src/features/workflow/config/agent-capabilities.ts
-- [ ] T031 [US4] Integrate router decisions with coordinator pipeline in src/features/workflow/services/workflowCoordinator.ts
-- [ ] T032 [US4] Surface routing decisions in src/components/workflow/WorkflowStatusPanel.tsx
+- [x] T028 [P] [US4] Write routing heuristics tests in src/features/workflow/services/__tests__/taskRouter.routing.spec.ts
+- [x] T029 [US4] Implement capability-based routing rules in src/features/workflow/services/taskRouter.ts
+- [x] T030 [US4] Define agent capability matrix in src/features/workflow/config/agent-capabilities.ts
+- [x] T031 [US4] Integrate router decisions with coordinator pipeline in src/features/workflow/services/workflowCoordinator.ts
+- [x] T032 [US4] Surface routing decisions in src/components/workflow/WorkflowStatusPanel.tsx
 
 **Checkpoint**: Routing adapts per task type; story independently verifiable.
 
@@ -113,9 +113,9 @@
 
 **Purpose**: Consolidate documentation, telemetry, and QA.
 
-- [ ] T033 Refresh quickstart guidance in specs/001-workflow-coordinator/quickstart.md
-- [ ] T034 [P] Add telemetry hooks & structured logging in src/features/workflow/services/workflowEventBus.ts
-- [ ] T035 Execute end-to-end validation script & update docs in docs/WORKFLOW_STATE_MACHINE.md
+- [x] T033 Refresh quickstart guidance in specs/001-workflow-coordinator/quickstart.md
+- [x] T034 [P] Add telemetry hooks & structured logging in src/features/workflow/services/workflowEventBus.ts
+- [x] T035 Execute end-to-end validation script & update docs in docs/WORKFLOW_STATE_MACHINE.md
 
 ---
 
